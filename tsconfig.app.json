@@ -21,7 +21,33 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "outDir": "build",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@auth/*": ["src/pages/auth/*"],
+      "@bankAccounts/*": ["src/pages/bank-accounts/*"],
+      "@cards/*": ["src/pages/cards/*"],
+      "@dashboard/*": ["src/pages/dashboard/*"],
+      "@loanAccounts/*": ["src/pages/loan-accounts/*"],
+      "@loanTransaction/*": ["src/pages/loan-transaction/*"],
+      "@notifications/*": ["src/pages/notifications/*"],
+      "@transaction/*": ["src/pages/transaction/*"],
+      "@userAccount/*": ["src/pages/user-account/*"],
+      "@shared/*": ["src/shared/*"],
+      "@sharedModels/*": ["src/shared/models/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@error/*": ["src/pages/error/*"]
+    }
   },
   "include": ["src"]
 }
