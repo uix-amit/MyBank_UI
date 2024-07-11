@@ -22,6 +22,7 @@ export default defineConfig({
       '@components': resolve(__dirname, 'src/components'),
       '@utils': resolve(__dirname, 'src/utils'),
       '@error': resolve(__dirname, 'src/pages/error'),
+      '@assets': resolve(__dirname, 'src/assets'),
     },
   },
 });

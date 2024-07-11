@@ -46,6 +46,7 @@
       "@sharedModels/*": ["src/shared/models/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
       "@error/*": ["src/pages/error/*"]
     }
   },
