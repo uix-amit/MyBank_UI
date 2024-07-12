@@ -54,7 +54,7 @@ export interface UpdateLoanTransactionDto {
      * @memberof UpdateLoanTransactionDto
      * @example 2024-07-10T06:52:41.158Z
      */
-    transactionDate?: Date;
+    transactionDate: Date;
 
     /**
      * @type {TransactionStatus}

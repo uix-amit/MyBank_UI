@@ -1,10 +1,13 @@
-function BankCard() {
+import { UpdateAccountDto } from '@shared/models';
+import { formatAccountNumber } from '@utils/utils';
+
+function BankCard({ account }: { account: UpdateAccountDto }) {
   return (
-    <div className='bg-white p-6 rounded-lg max-w-sm border border-primary shadow-xl'>
+    <div className='bg-white p-6 rounded max-full border border-primary shadow-xl'>
       <div className='flex justify-between items-center mb-4'>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Balance</div>
-          <div className='text-primary text-xl'>$123</div>
+          <div className='text-primary text-xl'>${account.balance}</div>
         </div>
         <img
           className='w-12'
@@ -13,13 +16,13 @@ function BankCard() {
         />
       </div>
       <div className='mb-4'>
-        <div className='text-gray-500 text-sm mb-1'>Card Number</div>
-        <div className='text-gray-800 text-xl'>1234 5678 9012 3456</div>
+        <div className='text-gray-500 text-sm mb-1'>Account Number</div>
+        <div className='text-gray-800 text-xl'>{formatAccountNumber(account.accountNumber)}</div>
       </div>
       <div className='flex justify-between items-center'>
         <div>
-          <div className='text-gray-500 text-sm mb-1'>Cardholder Name</div>
-          <div className='text-gray-800 font-bold'>John Doe</div>
+          <div className='text-gray-500 text-sm mb-1'>Account Holder Name</div>
+          <div className='text-gray-800 font-bold'>Riyansh Kumbharkar</div>
         </div>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Expires</div>

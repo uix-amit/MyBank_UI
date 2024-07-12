@@ -7,7 +7,7 @@ function Header() {
   const title: string = useSelector((state: RootState) => state.header.title);
 
   return (
-    <header className='shadow sticky top-0'>
+    <header className='shadow sticky top-0 z-20'>
       <div className='navbar bg-base-100 px-10'>
         <div className='flex-1'>
           <h1 className='text-3xl font-bold text-primary capitalize'>{title}</h1>
@@ -34,7 +34,7 @@ function Header() {
             </div>
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
+              className='menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow'
             >
               <li>
                 <Link to='user-account'>Profile</Link>

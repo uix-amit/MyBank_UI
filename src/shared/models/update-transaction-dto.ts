@@ -61,7 +61,7 @@ export interface UpdateTransactionDto {
      * @memberof UpdateTransactionDto
      * @example 2024-07-10T06:52:41.156Z
      */
-    transactionDate?: Date;
+    transactionDate: Date;
 
     /**
      * @type {TransactionStatus}
