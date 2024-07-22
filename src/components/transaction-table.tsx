@@ -1,12 +1,12 @@
 import { UpdateTransactionDto } from '@shared/models';
 import { format } from 'date-fns';
 
-const TransactionTable = ({ transactions }: { transactions: UpdateTransactionDto[] }) => {
+function TransactionTable({ transactions }: { transactions: UpdateTransactionDto[] }) {
   return (
-    <div className='overflow-x-auto'>
+    <div className='overflow-x-auto shadow rounded-lg'>
       <table className='table w-full'>
         <thead>
-          <tr className='bg-white rounded'>
+          <tr className='bg-white'>
             <th className='border-b font-bold rounded-t-lg'>From Account</th>
             <th className='border-b font-bold'>To Account</th>
             <th className='border-b font-bold'>Amount</th>
@@ -52,6 +52,6 @@ const TransactionTable = ({ transactions }: { transactions: UpdateTransactionDto
       </table>
     </div>
   );
-};
+}
 
 export default TransactionTable;
