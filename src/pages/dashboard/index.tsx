@@ -67,27 +67,27 @@ function Dashboard() {
             ))}
           </div>
           <h2 className='text-xl font-bold'>Balance History</h2>
-          <div className='flex flex-col card w-full border border-primary rounded bg-white px-6 pt-6 pb-4 shadow-xl'>
+          <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
             <AreaChart data={balanceHistory} categories={categories} />
           </div>
           <h2 className='text-xl font-bold'>Weekly Activity</h2>
-          <div className='flex flex-col card w-full border border-primary rounded bg-white px-6 pt-6 pb-4 shadow-xl'>
+          <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
             <BarChart data={weeklyExpences} categories={days} />
           </div>
         </div>
         <div className='w-full flex flex-col lg:w-1/3 gap-4'>
           <h2 className='text-xl font-bold'>Recent Transactions</h2>
-          <div className='z-0 flex flex-col card border border-primary rounded bg-white px-6 pt-6 pb-4 shadow-xl'>
+          <div className='z-0 flex flex-col card rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
             {transactions.map((transaction) => (
               <TransactionSummary key={transaction.transactionID} transaction={transaction} />
             ))}
           </div>
           <h2 className='text-xl font-bold'>Current Balance</h2>
-          <div className='flex flex-col card w-full border border-primary rounded bg-white px-6 pt-6 pb-4 shadow-xl'>
+          <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
             <PieChart series={currentBalance} />
           </div>
           <h2 className='text-xl font-bold'>Loan Transactions</h2>
-          <div className='z-0 flex flex-col card w-full border border-primary rounded bg-white px-6 pt-6 pb-4 shadow-xl'>
+          <div className='z-0 flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
             {loanTransactions.map((transaction) => (
               <TransactionSummary key={transaction.transactionID} transaction={transaction} />
             ))}

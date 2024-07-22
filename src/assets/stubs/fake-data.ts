@@ -4,6 +4,7 @@ import {
   TransactionStatus,
   TransactionType,
   UpdateAccountDto,
+  UpdateCardDto,
   UpdateLoanTransactionDto,
   UpdateTransactionDto,
 } from '@shared/models';
@@ -103,5 +104,35 @@ export const loanTransactions: UpdateLoanTransactionDto[] = [
     toAccountID: 'John Doe',
     fromAccountID: 'Jane Doe',
     transactionStatus: TransactionStatus.COMPLETE,
+  },
+];
+
+export const cards: UpdateCardDto[] = [
+  {
+    cardID: 'clyi97hbx00000cikfwsrbiq1',
+    accountID: 'clyi97hbx00000cikfwsrbiqr',
+    cardNumber: '1234567890124567',
+    CVV: 123,
+    expirationDate: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    cardID: 'clyi97hbx00000cikfwsrbiq2',
+    accountID: 'clyi9f7xg00010ckuacxhcwox',
+    cardNumber: '1234567890124567',
+    CVV: 123,
+    expirationDate: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    cardID: 'clyi97hbx00000cikfwsrbiq3',
+    accountID: 'clyi9f7xg00010ckuacxhcwox',
+    cardNumber: '1234567890124567',
+    CVV: 123,
+    expirationDate: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
