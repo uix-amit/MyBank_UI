@@ -33,21 +33,21 @@ export interface UpdateLoanTransactionDto {
      * @memberof UpdateLoanTransactionDto
      * @example 099aee00-e693-4278-8448-b7e9cbc83a57
      */
-    fromAccountID?: string;
+    fromAccountID: string;
 
     /**
      * @type {string}
      * @memberof UpdateLoanTransactionDto
      * @example 7fe72f96-9184-4641-b8f6-37231862028a
      */
-    toAccountID?: string;
+    toAccountID: string;
 
     /**
      * @type {number}
      * @memberof UpdateLoanTransactionDto
      * @example 10.9
      */
-    amount?: number;
+    amount: number;
 
     /**
      * @type {Date}
@@ -60,5 +60,5 @@ export interface UpdateLoanTransactionDto {
      * @type {TransactionStatus}
      * @memberof UpdateLoanTransactionDto
      */
-    transactionStatus?: TransactionStatus;
+    transactionStatus: TransactionStatus;
 }

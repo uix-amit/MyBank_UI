@@ -27,6 +27,7 @@ function BarChart({ data, categories }: { data: ApexAxisChartSeries; categories:
     plotOptions: {
       bar: {
         borderRadius: 4,
+        columnWidth: '45%',
       },
     },
   };

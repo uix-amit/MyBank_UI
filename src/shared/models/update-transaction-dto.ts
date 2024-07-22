@@ -34,27 +34,27 @@ export interface UpdateTransactionDto {
      * @memberof UpdateTransactionDto
      * @example 099aee00-e693-4278-8448-b7e9cbc83a57
      */
-    fromAccountID?: string;
+    fromAccountID: string;
 
     /**
      * @type {string}
      * @memberof UpdateTransactionDto
      * @example 7fe72f96-9184-4641-b8f6-37231862028a
      */
-    toAccountID?: string;
+    toAccountID: string;
 
     /**
      * @type {number}
      * @memberof UpdateTransactionDto
      * @example 10.9
      */
-    amount?: number;
+    amount: number;
 
     /**
      * @type {TransactionType}
      * @memberof UpdateTransactionDto
      */
-    transactionType?: TransactionType;
+    transactionType: TransactionType;
 
     /**
      * @type {Date}
@@ -67,5 +67,5 @@ export interface UpdateTransactionDto {
      * @type {TransactionStatus}
      * @memberof UpdateTransactionDto
      */
-    transactionStatus?: TransactionStatus;
+    transactionStatus: TransactionStatus;
 }
