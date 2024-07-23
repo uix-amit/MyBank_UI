@@ -78,7 +78,7 @@ function ChangePassword() {
           />
         </div>
 
-        {error && <span className='text-red-500 mb-4'>{error}</span>}
+        {error && <span className='text-red-500 text-sm mb-4'>{error}</span>}
 
         <button
           type='submit'
