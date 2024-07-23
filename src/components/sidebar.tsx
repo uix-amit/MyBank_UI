@@ -24,7 +24,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='/'>Overview</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Savings Account</li>
           <li className='px-4'>
             <Link to='savings-account'>View Accounts</Link>
@@ -32,7 +31,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='savings-account/create'>Link new Account</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Cards</li>
           <li className='px-4'>
             <Link to='cards'>View Cards</Link>
@@ -40,7 +38,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='cards/create'>Link New Card</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Transaction</li>
           <li className='px-4'>
             <Link to='transaction'>History</Link>
@@ -48,7 +45,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='transaction/create'>Transfer</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Loan Account</li>
           <li className='px-4'>
             <Link to='loan-account'>View Accounts</Link>
@@ -56,7 +52,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='loan-account/create'>Avail Loan</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Loan Transaction</li>
           <li className='px-4'>
             <Link to='loan-transaction'>History</Link>
@@ -64,7 +59,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='loan-transaction/create'>Make Payment</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>User Account</li>
           <li className='px-4'>
             <Link to='user-account'>Profile</Link>
@@ -75,7 +69,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='user-account/change-password'>Change Password</Link>
           </li>
-          <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Notifications</li>
           <li className='px-4'>
             <Link to='notifications'>View notifications</Link>

@@ -13,13 +13,10 @@ function App() {
         template={
           <>
             <Header />
-            <main className='px-10 py-5 bg-slate-100 h-full overflow-hidden'>
+            <main className='px-4 lg:px-10 py-5 bg-slate-100 h-full overflow-hidden'>
               <Outlet />
             </main>
             <Footer />
-            <label htmlFor='my-drawer-2' className='btn btn-primary drawer-button md:hidden'>
-              Open drawer
-            </label>
           </>
         }
       />

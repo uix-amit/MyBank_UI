@@ -7,10 +7,19 @@ function Header() {
   const title: string = useSelector((state: RootState) => state.header.title);
 
   return (
-    <header className='shadow sticky top-0 z-20'>
-      <div className='navbar bg-base-100 px-10'>
+    <header className='shadow sticky top-0 z-20 flex'>
+      <div className='navbar bg-base-100 px-4 lg:px-10 flex gap-4'>
+        <label htmlFor='my-drawer-2' className='drawer-button md:hidden flex items-center'>
+          <img
+            className='w-6'
+            src='https://img.icons8.com/?size=100&id=120374&format=png&color=000000'
+            alt='Menu'
+          />
+        </label>
         <div className='flex-1'>
-          <h1 className='text-3xl font-bold text-primary capitalize'>{title}</h1>
+          <h1 className='text-xl md:text-2xl lg:text-3xl font-bold text-primary capitalize'>
+            {title}
+          </h1>
         </div>
         <div className='flex-none gap-2'>
           <Link to='notifications' className='btn btn-ghost btn-circle'>
