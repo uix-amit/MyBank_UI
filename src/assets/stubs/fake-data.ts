@@ -9,6 +9,7 @@ import {
   UpdateCardDto,
   UpdateLoanDto,
   UpdateLoanTransactionDto,
+  UpdateNotificationDto,
   UpdateTransactionDto,
 } from '@shared/models';
 
@@ -188,5 +189,24 @@ export const loanAccounts: UpdateLoanDto[] = [
     loanStartDate: new Date().toISOString(),
     loanTerm: 360,
     remainingTenure: 360,
+  },
+];
+
+export const notifications: UpdateNotificationDto[] = [
+  {
+    notificationID: 'clyyix8aj00000clbdnd91ncw',
+    userID: 'clyyix8aj00000clbdnd91nch',
+    createdAt: new Date(),
+    isRead: true,
+    message:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet vulputate quam at congue.',
+  },
+  {
+    notificationID: 'clyyix8aj00000clbdnd91ncc',
+    userID: 'clyyix8aj00000clbdnd91ncr',
+    createdAt: new Date(),
+    isRead: false,
+    message:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet vulputate quam at congue.',
   },
 ];

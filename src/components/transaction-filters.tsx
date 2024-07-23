@@ -4,7 +4,7 @@ function TransactionFilters({ isLoanFilter }: { isLoanFilter: boolean } = { isLo
       <div className='flex items-center gap-4 flex-wrap'>
         {isLoanFilter ? (
           <select className='border rounded-lg py-2 px-4 pr-8 focus:outline-none focus:ring-2'>
-            <option value=''>All Transactions</option>
+            <option value=''>All Loans</option>
             <option value='HOME'>HOME</option>
             <option value='VEHICLE'>VEHICLE</option>
             <option value='GOLD'>GOLD</option>

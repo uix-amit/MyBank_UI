@@ -21,63 +21,63 @@ function Sidebar({ template }: { template: ReactNode }) {
           </li>
           <hr className='shadow' />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Dashboard</li>
-          <li>
-            <Link to='/'>overview</Link>
+          <li className='px-4'>
+            <Link to='/'>Overview</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Savings Account</li>
-          <li>
+          <li className='px-4'>
             <Link to='savings-account'>View Accounts</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='savings-account/create'>Link new Account</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Cards</li>
-          <li>
+          <li className='px-4'>
             <Link to='cards'>View Cards</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='cards/create'>Link New Card</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Transaction</li>
-          <li>
+          <li className='px-4'>
             <Link to='transaction'>History</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='transaction/create'>Transfer</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Loan Account</li>
-          <li>
+          <li className='px-4'>
             <Link to='loan-account'>View Accounts</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='loan-account/create'>Avail Loan</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Loan Transaction</li>
-          <li>
+          <li className='px-4'>
             <Link to='loan-transaction'>History</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='loan-transaction/create'>Make Payment</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>User Account</li>
-          <li>
+          <li className='px-4'>
             <Link to='user-account'>Profile</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='user-account/preference'>Preferences</Link>
           </li>
-          <li>
+          <li className='px-4'>
             <Link to='user-account/change-password'>Change Password</Link>
           </li>
           <hr />
           <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Notifications</li>
-          <li>
+          <li className='px-4'>
             <Link to='notifications'>View notifications</Link>
           </li>
         </ul>
