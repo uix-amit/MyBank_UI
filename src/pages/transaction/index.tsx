@@ -17,7 +17,7 @@ function Transaction() {
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Filters</h2>
-      <TransactionFilters />
+      <TransactionFilters isLoanFilter={false} />
       <h2 className='text-xl font-bold mb-4'>Transaction History</h2>
       <TransactionTable transactions={transactions} />
     </>

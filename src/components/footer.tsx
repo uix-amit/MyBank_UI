@@ -70,7 +70,7 @@ function Footer() {
           <p>
             Designed and Developed by{' '}
             <a
-              className='text-primary font-bold underline'
+              className='underline'
               href='https://uiexplorer.netlify.app'
               target='_blank'
               rel='noopener noreferrer'

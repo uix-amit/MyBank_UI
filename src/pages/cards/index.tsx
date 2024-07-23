@@ -35,7 +35,7 @@ function Card() {
           Link new card
           <img
             className='inline-block w-8 pl-2'
-            src='https://img.icons8.com/?size=100&id=355&format=png&color=000000'
+            src='https://img.icons8.com/?size=100&id=355&format=png&color=491eff'
             alt='link new card'
           />
         </Link>
