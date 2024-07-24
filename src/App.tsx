@@ -6,20 +6,27 @@ import Header from '@components/header';
 import Sidebar from '@components/sidebar';
 
 function App() {
+  const isLoggedIn: boolean = true;
   return (
     <>
       <Banner />
-      <Sidebar
-        template={
-          <>
-            <Header />
-            <main className='px-4 lg:px-10 py-5 bg-slate-100 h-full overflow-hidden'>
-              <Outlet />
-            </main>
-            <Footer />
-          </>
-        }
-      />
+      {isLoggedIn ? (
+        <Sidebar
+          template={
+            <>
+              <Header />
+              <main className='flex flex-col grow px-4 lg:px-10 py-5 bg-slate-100 h-full overflow-hidden'>
+                <Outlet />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+      ) : (
+        <main className='flex flex-col grow px-4 lg:px-10 py-5 bg-slate-100 h-full overflow-hidden'>
+          <Outlet />
+        </main>
+      )}
     </>
   );
 }
