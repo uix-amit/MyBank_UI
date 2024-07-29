@@ -1,8 +1,10 @@
 import { setTitle } from '@shared/store/header.slice';
-import { AppDispatch } from '@shared/store/rootStore';
 import { differenceInYears } from 'date-fns';
-import { useState, useEffect, FormEvent } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { AppDispatch } from '@shared/store/rootStore';
 
 function Signup() {
   const dispatch = useDispatch<AppDispatch>();
@@ -88,11 +90,11 @@ function Signup() {
   };
 
   return (
-    <>
-      <h2 className='text-xl font-bold mb-4'>Register Here</h2>
+    <div className='flex flex-col w-full lg:w-sm px-4 max-w-md m-auto my-6'>
+      <h2 className='text-4xl mb-4 text-white text-center'>Register Here</h2>
       <form
         onSubmit={handleSubmit}
-        className='w-full lg:w-1/2 flex flex-col p-4 bg-white rounded-lg shadow-lg'
+        className='w-full flex flex-col p-4 bg-white rounded-lg shadow-lg'
       >
         {Object.keys(formData).map((key) => (
           <div className='form-control mb-4' key={key}>
@@ -126,8 +128,15 @@ function Signup() {
         >
           Sign Up
         </button>
+        <p className='text-sm text-right m-0 mt-4'>
+          <span>Existing user's please </span>
+          <Link className='text-primary' to={'../'}>
+            login here
+          </Link>
+          .
+        </p>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -14,7 +14,7 @@ function TransactionSummary({
           alt='transaction'
         />
         <div className='flex flex-col'>
-          <p>Generico Kamothe</p>
+          <p>Lorem ipsum</p>
           <p>{format(transaction.transactionDate, 'do MMMM yyyy')}</p>
         </div>
       </div>

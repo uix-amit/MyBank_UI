@@ -7,6 +7,7 @@ import BankAccountCreate from '@bankAccounts/create';
 import BankAccount from '@bankAccounts/index';
 import CardCreate from '@cards/create';
 import Card from '@cards/index';
+import ProtectedRoute from '@components/ProtectedRoute';
 import Dashboard from '@dashboard/index';
 import NotFound from '@error/404';
 import LoanAccountCreate from '@loanAccounts/create';
@@ -23,33 +24,37 @@ import App from '../App';
 
 const router = createBrowserRouter([
   {
+    path: 'auth',
+    children: [
+      {
+        index: true,
+        element: <Signin />,
+      },
+      {
+        path: 'signin',
+        element: <Signin />,
+      },
+      {
+        path: 'signup',
+        element: <Signup />,
+      },
+      {
+        path: '2fa',
+        element: <Otp />,
+      },
+    ],
+  },
+  {
     path: '/',
-    element: <App />,
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '',
         element: <Dashboard />,
-      },
-      {
-        path: 'auth',
-        children: [
-          {
-            index: true,
-            element: <Signin />,
-          },
-          {
-            path: 'signin',
-            element: <Signin />,
-          },
-          {
-            path: 'signup',
-            element: <Signup />,
-          },
-          {
-            path: '2fa',
-            element: <Otp />,
-          },
-        ],
       },
       {
         path: 'savings-account',

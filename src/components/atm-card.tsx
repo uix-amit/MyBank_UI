@@ -7,7 +7,7 @@ function AtmCard({ card }: { card: UpdateCardDto }) {
       <div className='flex justify-between items-center mb-4'>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Account Holder</div>
-          <div className='text-primary text-xl'>Riyansh Kumbharkar</div>
+          <div className='text-primary text-xl'>Alexander Day</div>
         </div>
         <img
           className='w-12'

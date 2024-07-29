@@ -22,7 +22,7 @@ function BankCard({ account }: { account: UpdateAccountDto }) {
       <div className='flex justify-between items-center'>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Account Holder</div>
-          <div className='text-gray-800 font-bold'>Riyansh Kumbharkar</div>
+          <div className='text-gray-800 font-bold'>Alexander Day</div>
         </div>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Expires</div>

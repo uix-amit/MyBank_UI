@@ -16,7 +16,7 @@ function CardItem({ card }: { card: UpdateCardDto }) {
       </div>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Card Holder</div>
-        <div className='text-gray-800'>Riyansh Kumbharkar</div>
+        <div className='text-gray-800'>Alexander Day</div>
       </div>
       <Link to={'details'} className='text-primary grow'>
         View Details

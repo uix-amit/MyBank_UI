@@ -7,8 +7,8 @@ function Profile() {
   const dispatch = useDispatch<AppDispatch>();
 
   const [formData, setFormData] = useState({
-    firstName: 'Amit',
-    lastName: 'Kumbharkar',
+    firstName: 'Alexander',
+    lastName: 'Day',
     email: 'amit@uiexplorer.com',
     phoneNumber: '9967069257',
     dateOfBirth: '1992-06-16',
