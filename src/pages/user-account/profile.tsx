@@ -96,7 +96,9 @@ function Profile() {
             required
             className='input input-bordered'
           />
-          {errors.firstName && <span className='text-red-500 text-sm mt-1'>{errors.firstName}</span>}
+          {errors.firstName && (
+            <span className='text-red-500 text-sm mt-1'>{errors.firstName}</span>
+          )}
         </div>
         <div className='form-control mb-4'>
           <label className='label'>
@@ -139,7 +141,9 @@ function Profile() {
             className='input input-bordered'
             maxLength={10}
           />
-          {errors.phoneNumber && <span className='text-red-500 text-sm mt-1'>{errors.phoneNumber}</span>}
+          {errors.phoneNumber && (
+            <span className='text-red-500 text-sm mt-1'>{errors.phoneNumber}</span>
+          )}
         </div>
         <div className='form-control mb-4'>
           <label className='label'>
@@ -153,7 +157,9 @@ function Profile() {
             required
             className='input input-bordered'
           />
-          {errors.dateOfBirth && <span className='text-red-500 text-sm mt-1'>{errors.dateOfBirth}</span>}
+          {errors.dateOfBirth && (
+            <span className='text-red-500 text-sm mt-1'>{errors.dateOfBirth}</span>
+          )}
         </div>
         <div className='flex flex-col-reverse lg:flex-row gap-4'>
           <button type='reset' className='btn-secondary btn grow'>
