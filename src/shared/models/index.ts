@@ -5,6 +5,7 @@ export * from './create-card-dto';
 export * from './create-loan-dto';
 export * from './create-loan-transaction-dto';
 export * from './create-notification-dto';
+export * from './create-transaction-config';
 export * from './create-transaction-dto';
 export * from './create-two-factor-auth-dto';
 export * from './create-user-dto';
@@ -23,3 +24,4 @@ export * from './update-notification-dto';
 export * from './update-transaction-dto';
 export * from './update-two-factor-auth-dto';
 export * from './update-user-dto';
+
