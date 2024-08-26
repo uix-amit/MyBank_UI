@@ -1,176 +1,157 @@
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { FormEvent, useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
 
 function Profile() {
   const dispatch = useDispatch<AppDispatch>();
-
-  const [formData, setFormData] = useState({
-    firstName: 'Alexander',
-    lastName: 'Day',
-    email: 'amit@uiexplorer.com',
-    phoneNumber: '9967069257',
-    dateOfBirth: '1992-06-16',
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      dateOfBirth: '',
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .required('First name is required')
+        .max(20, 'First name must be at most 20 characters'),
+      lastName: Yup.string()
+        .required('Last name is required')
+        .max(20, 'Last name must be at most 20 characters'),
+      email: Yup.string().required('Email is required').email('Invalid email address'),
+      phoneNumber: Yup.string()
+        .required('Phone number is required')
+        .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
+      dateOfBirth: Yup.date()
+        .required('Date of birth is required')
+        .max(
+          new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
+          'You must be at least 18 years old'
+        ),
+    }),
+    onSubmit: (values) => {
+      console.log('Profile updated:', values);
+    },
+    onReset: () => {
+      formik.resetForm();
+    },
   });
-
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateOfBirth: '',
-  });
-
-  const [isValid, setIsValid] = useState(false);
-
-  const validateEmail = (email: string) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
-
-  const validatePhoneNumber = (phone: string) => {
-    const re = /^\d{10}$/;
-    return re.test(phone);
-  };
-
-  const validateDateOfBirth = (dob: string) => {
-    const today = new Date();
-    const birthDate = new Date(dob);
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-    return age > 18 || (age === 18 && monthDifference >= 0);
-  };
 
   useEffect(() => {
     dispatch(setTitle('profile'));
-    const { firstName, lastName, email, phoneNumber, dateOfBirth } = formData;
-    const newErrors = {
-      firstName: firstName ? '' : 'First Name is required',
-      lastName: lastName ? '' : 'Last Name is required',
-      email: validateEmail(email) ? '' : 'Invalid email address',
-      phoneNumber: validatePhoneNumber(phoneNumber) ? '' : 'Phone Number must be 10 digits',
-      dateOfBirth: validateDateOfBirth(dateOfBirth) ? '' : 'You must be at least 18 years old',
-    };
-    setErrors(newErrors);
-    const isFormValid =
-      firstName &&
-      lastName &&
-      validateEmail(email) &&
-      validatePhoneNumber(phoneNumber) &&
-      validateDateOfBirth(dateOfBirth);
-    setIsValid(isFormValid as boolean);
-  }, [formData, dispatch]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-  };
+  }, [dispatch]);
 
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Update My Profile</h2>
       <form
-        onSubmit={handleSubmit}
-        className='w-full lg:w-1/2 flex flex-col p-4 bg-white rounded-lg shadow-lg'
+        onSubmit={formik.handleSubmit}
+        className='w-full lg:w-1/2 flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg'
       >
-        <div className='form-control mb-4'>
-          <label className='label'>
-            <span className='label-text'>First Name</span>
+        <div>
+          <label htmlFor='firstName' className='block text-sm font-medium text-gray-700'>
+            First Name
           </label>
           <input
-            type='text'
+            id='firstName'
             name='firstName'
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            className='input input-bordered'
+            type='text'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.firstName}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.firstName && formik.errors.firstName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {errors.firstName && (
-            <span className='text-red-500 text-sm mt-1'>{errors.firstName}</span>
-          )}
+          {formik.touched.firstName && formik.errors.firstName ? (
+            <div className='text-red-500 text-sm'>{formik.errors.firstName}</div>
+          ) : null}
         </div>
-        <div className='form-control mb-4'>
-          <label className='label'>
-            <span className='label-text'>Last Name</span>
+
+        <div>
+          <label htmlFor='lastName' className='block text-sm font-medium text-gray-700'>
+            Last Name
           </label>
           <input
-            type='text'
+            id='lastName'
             name='lastName'
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            className='input input-bordered'
-          />
-          {errors.lastName && <span className='text-red-500 text-sm mt-1'>{errors.lastName}</span>}
-        </div>
-        <div className='form-control mb-4'>
-          <label className='label'>
-            <span className='label-text'>Email</span>
-          </label>
-          <input
-            type='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className='input input-bordered'
-          />
-          {errors.email && <span className='text-red-500 text-sm mt-1'>{errors.email}</span>}
-        </div>
-        <div className='form-control mb-4'>
-          <label className='label'>
-            <span className='label-text'>Phone Number</span>
-          </label>
-          <input
             type='text'
-            name='phoneNumber'
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-            className='input input-bordered'
-            maxLength={10}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.lastName}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.lastName && formik.errors.lastName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {errors.phoneNumber && (
-            <span className='text-red-500 text-sm mt-1'>{errors.phoneNumber}</span>
-          )}
+          {formik.touched.lastName && formik.errors.lastName ? (
+            <div className='text-red-500 text-sm'>{formik.errors.lastName}</div>
+          ) : null}
         </div>
-        <div className='form-control mb-4'>
-          <label className='label'>
-            <span className='label-text'>Date of Birth</span>
+
+        <div>
+          <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
+            Email
           </label>
           <input
-            type='date'
-            name='dateOfBirth'
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            required
-            className='input input-bordered'
+            id='email'
+            name='email'
+            type='email'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {errors.dateOfBirth && (
-            <span className='text-red-500 text-sm mt-1'>{errors.dateOfBirth}</span>
-          )}
+          {formik.touched.email && formik.errors.email ? (
+            <div className='text-red-500 text-sm'>{formik.errors.email}</div>
+          ) : null}
         </div>
+
+        <div>
+          <label htmlFor='phoneNumber' className='block text-sm font-medium text-gray-700'>
+            Phone Number
+          </label>
+          <input
+            id='phoneNumber'
+            name='phoneNumber'
+            type='text'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.phoneNumber}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.phoneNumber && formik.errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+          />
+          {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+            <div className='text-red-500 text-sm'>{formik.errors.phoneNumber}</div>
+          ) : null}
+        </div>
+
+        <div>
+          <label htmlFor='dateOfBirth' className='block text-sm font-medium text-gray-700'>
+            Date of Birth
+          </label>
+          <input
+            id='dateOfBirth'
+            name='dateOfBirth'
+            type='date'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.dateOfBirth}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.dateOfBirth && formik.errors.dateOfBirth ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+          />
+          {formik.touched.dateOfBirth && formik.errors.dateOfBirth ? (
+            <div className='text-red-500 text-sm'>{formik.errors.dateOfBirth}</div>
+          ) : null}
+        </div>
+
         <div className='flex flex-col-reverse lg:flex-row gap-4'>
           <button type='reset' className='btn-secondary btn grow'>
             Cancel
           </button>
           <button
             type='submit'
-            disabled={!isValid}
-            className={`btn grow ${isValid ? 'btn-primary' : 'btn-disabled'}`}
+            disabled={!formik.isValid || !formik.dirty}
+            className={`btn grow ${formik.isValid ? 'btn-primary' : 'btn-disabled'}`}
           >
-            Submit
+            Update Profile
           </button>
         </div>
       </form>
