@@ -1,40 +1,44 @@
+import axios from 'axios';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import { baseUrl } from '@utils/constants';
+
 function Signup() {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      dateOfBirth: '',
-      userName: '',
-      password: '',
-      confirmPassword: '',
+      FirstName: '',
+      LastName: '',
+      Email: '',
+      PhoneNumber: '',
+      DateOfBirth: '',
+      UserName: '',
+      Password: '',
+      ConfirmPassword: '',
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
+      FirstName: Yup.string()
         .required('First name is required')
         .max(20, 'First name must be at most 20 characters'),
-      lastName: Yup.string()
+      LastName: Yup.string()
         .required('Last name is required')
         .max(20, 'Last name must be at most 20 characters'),
-      email: Yup.string().required('Email is required').email('Invalid email address'),
-      phoneNumber: Yup.string()
+      Email: Yup.string().required('Email is required').email('Invalid Email address'),
+      PhoneNumber: Yup.string()
         .required('Phone number is required')
         .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
-      dateOfBirth: Yup.date()
+      DateOfBirth: Yup.date()
         .required('Date of birth is required')
         .max(
           new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
           'You must be at least 18 years old'
         ),
-      userName: Yup.string()
-        .required('Username is required')
-        .min(4, 'Username must be at least 4 characters long'),
-      password: Yup.string()
+      UserName: Yup.string()
+        .required('UserName is required')
+        .min(4, 'UserName must be at least 4 characters long'),
+      Password: Yup.string()
         .required('Password is required')
         .min(8, 'Password must be at least 8 characters long')
         .max(32, 'Password must be at most 32 characters long')
@@ -42,12 +46,21 @@ function Signup() {
         .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
         .matches(/[0-9]/, 'Password must contain at least one number')
         .matches(/[\W_]/, 'Password must contain at least one special character'),
-      confirmPassword: Yup.string()
-        .required('Confirm password is required')
-        .oneOf([Yup.ref('password'), ''], 'Passwords must match'),
+      ConfirmPassword: Yup.string()
+        .required('Confirm Password is required')
+        .oneOf([Yup.ref('Password'), ''], 'Passwords must match'),
     }),
     onSubmit: (values) => {
-      console.log('Form data', values);
+      const { ConfirmPassword, ...payload } = values;
+      console.log('ConfirmPassword: ', ConfirmPassword);
+
+      axios
+        .post(`${baseUrl}/users`, {
+          ...payload,
+          DateOfBirth: new Date(values.DateOfBirth).toISOString(),
+        })
+        .then(() => navigate('/auth/signin'))
+        .catch((error) => console.log(error));
     },
     onReset: () => {
       formik.resetForm();
@@ -62,146 +75,146 @@ function Signup() {
         className='w-full flex flex-col p-4 gap-4 bg-white rounded-lg shadow-lg'
       >
         <div>
-          <label htmlFor='firstName' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='FirstName' className='block text-sm font-medium text-gray-700'>
             First Name
           </label>
           <input
-            id='firstName'
-            name='firstName'
+            id='FirstName'
+            name='FirstName'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.firstName}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.firstName && formik.errors.firstName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.FirstName}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.FirstName && formik.errors.FirstName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.firstName && formik.errors.firstName ? (
-            <div className='text-red-500 text-sm'>{formik.errors.firstName}</div>
+          {formik.touched.FirstName && formik.errors.FirstName ? (
+            <div className='text-red-500 text-sm'>{formik.errors.FirstName}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='lastName' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='LastName' className='block text-sm font-medium text-gray-700'>
             Last Name
           </label>
           <input
-            id='lastName'
-            name='lastName'
+            id='LastName'
+            name='LastName'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.lastName}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.lastName && formik.errors.lastName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.LastName}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.LastName && formik.errors.LastName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.lastName && formik.errors.lastName ? (
-            <div className='text-red-500 text-sm'>{formik.errors.lastName}</div>
+          {formik.touched.LastName && formik.errors.LastName ? (
+            <div className='text-red-500 text-sm'>{formik.errors.LastName}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Email' className='block text-sm font-medium text-gray-700'>
             Email
           </label>
           <input
-            id='email'
-            name='email'
-            type='email'
+            id='Email'
+            name='Email'
+            type='Email'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.email}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Email}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.Email && formik.errors.Email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.email && formik.errors.email ? (
-            <div className='text-red-500 text-sm'>{formik.errors.email}</div>
+          {formik.touched.Email && formik.errors.Email ? (
+            <div className='text-red-500 text-sm'>{formik.errors.Email}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='phoneNumber' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='PhoneNumber' className='block text-sm font-medium text-gray-700'>
             Phone Number
           </label>
           <input
-            id='phoneNumber'
-            name='phoneNumber'
+            id='PhoneNumber'
+            name='PhoneNumber'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.phoneNumber}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.phoneNumber && formik.errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.PhoneNumber}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.PhoneNumber && formik.errors.PhoneNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
-            <div className='text-red-500 text-sm'>{formik.errors.phoneNumber}</div>
+          {formik.touched.PhoneNumber && formik.errors.PhoneNumber ? (
+            <div className='text-red-500 text-sm'>{formik.errors.PhoneNumber}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='dateOfBirth' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='DateOfBirth' className='block text-sm font-medium text-gray-700'>
             Date of Birth
           </label>
           <input
-            id='dateOfBirth'
-            name='dateOfBirth'
+            id='DateOfBirth'
+            name='DateOfBirth'
             type='date'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.dateOfBirth}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.dateOfBirth && formik.errors.dateOfBirth ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.DateOfBirth}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.DateOfBirth && formik.errors.DateOfBirth ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.dateOfBirth && formik.errors.dateOfBirth ? (
-            <div className='text-red-500 text-sm'>{formik.errors.dateOfBirth}</div>
+          {formik.touched.DateOfBirth && formik.errors.DateOfBirth ? (
+            <div className='text-red-500 text-sm'>{formik.errors.DateOfBirth}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='userName' className='block text-sm font-medium text-gray-700'>
-            Username
+          <label htmlFor='UserName' className='block text-sm font-medium text-gray-700'>
+            UserName
           </label>
           <input
-            id='userName'
-            name='userName'
+            id='UserName'
+            name='UserName'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.userName}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.userName && formik.errors.userName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.UserName}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.UserName && formik.errors.UserName ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.userName && formik.errors.userName ? (
-            <div className='text-red-500 text-sm'>{formik.errors.userName}</div>
+          {formik.touched.UserName && formik.errors.UserName ? (
+            <div className='text-red-500 text-sm'>{formik.errors.UserName}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Password' className='block text-sm font-medium text-gray-700'>
             Password
           </label>
           <input
-            id='password'
-            name='password'
-            type='password'
+            id='Password'
+            name='Password'
+            type='Password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.password}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Password}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.Password && formik.errors.Password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.password && formik.errors.password ? (
-            <div className='text-red-500 text-sm'>{formik.errors.password}</div>
+          {formik.touched.Password && formik.errors.Password ? (
+            <div className='text-red-500 text-sm'>{formik.errors.Password}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='confirmPassword' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='ConfirmPassword' className='block text-sm font-medium text-gray-700'>
             Confirm Password
           </label>
           <input
-            id='confirmPassword'
-            name='confirmPassword'
-            type='password'
+            id='ConfirmPassword'
+            name='ConfirmPassword'
+            type='Password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.confirmPassword}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.ConfirmPassword}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.ConfirmPassword && formik.errors.ConfirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            <div className='text-red-500 text-sm'>{formik.errors.confirmPassword}</div>
+          {formik.touched.ConfirmPassword && formik.errors.ConfirmPassword ? (
+            <div className='text-red-500 text-sm'>{formik.errors.ConfirmPassword}</div>
           ) : null}
         </div>
 

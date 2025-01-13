@@ -25,61 +25,61 @@ export interface CreateUserDto {
      * @memberof CreateUserDto
      * @example John
      */
-    firstName: string;
+    FirstName: string;
 
     /**
      * @type {string}
      * @memberof CreateUserDto
      * @example Doe
      */
-    lastName: string;
+    LastName: string;
 
     /**
      * @type {string}
      * @memberof CreateUserDto
      * @example john.doe@gmail.com
      */
-    email: string;
+    Email: string;
 
     /**
      * @type {string}
      * @memberof CreateUserDto
      * @example xxxxxxxx
      */
-    password: string;
+    Password: string;
 
     /**
      * @type {string}
      * @memberof CreateUserDto
      * @example JohnDoe
      */
-    userName: string;
+    UserName: string;
 
     /**
      * @type {string}
      * @memberof CreateUserDto
      * @example 1234123423
      */
-    phoneNumber: string;
+    PhoneNumber: string;
 
     /**
      * @type {Date}
      * @memberof CreateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    dateOfBirth: Date;
+    DateOfBirth: Date;
 
     /**
      * @type {Date}
      * @memberof CreateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    createdAt?: Date;
+    CreatedAt?: Date;
 
     /**
      * @type {Date}
      * @memberof CreateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    updatedAt?: Date;
+    UpdatedAt?: Date;
 }
