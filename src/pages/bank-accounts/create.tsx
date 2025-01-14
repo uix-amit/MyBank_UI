@@ -1,12 +1,15 @@
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import axiosInstance from '@utils/axiosInstance';
 
 function BankAccountCreate() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -15,18 +18,18 @@ function BankAccountCreate() {
 
   const formik = useFormik({
     initialValues: {
-      bankID: '',
-      accountNumber: '',
-      balance: '',
-      currency: '',
-      status: '',
+      BankID: '',
+      AccountNumber: '',
+      Balance: '',
+      Currency: '',
+      Status: '',
     },
     validationSchema: Yup.object({
-      bankID: Yup.string().required('Bank is required'),
-      accountNumber: Yup.string()
+      BankID: Yup.string().required('Bank is required'),
+      AccountNumber: Yup.string()
         .matches(/^\d{16}$/, 'Account number must be exactly 16 digits')
         .required('Account number is required'),
-      balance: Yup.string()
+      Balance: Yup.string()
         .matches(
           /^(?!0\d)\d*\.?\d{0,2}$/,
           'Balance must be a valid number with up to 2 decimal places'
@@ -36,18 +39,40 @@ function BankAccountCreate() {
           const numValue = parseFloat(value);
           return numValue > 0;
         }),
-      currency: Yup.string().required('Currency is required'),
-      status: Yup.string().required('Status is required'),
+      Currency: Yup.string().required('Currency is required'),
+      Status: Yup.string().required('Status is required'),
     }),
     onSubmit: (values) => {
-      console.log('Form data', values);
+      axiosInstance
+        .post(
+          '/savings-account',
+          { ...values, Balance: parseFloat(values.Balance) },
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
+            },
+          }
+        )
+        .then((data) => {
+          console.log(data);
+
+          navigate('/savings-account');
+        })
+        .catch(console.error);
     },
   });
 
   const banks = [
-    { value: 'icici', label: 'ICICI' },
-    { value: 'hdfc', label: 'HDFC' },
-    { value: 'sbi', label: 'SBI' },
+    { value: 'cm5ws2j1s00040cjrb7aye7zq', label: 'State Bank of India' },
+    { value: 'cm5ws2y3f00050cjr77q0d8fg', label: 'HDFC Bank' },
+    { value: 'cm5ws36d300070cjrbavq6sln', label: 'ICICI Bank' },
+    { value: 'cm5ws3tqh00080cjr3ljq6pyp', label: 'Axis Bank' },
+    { value: 'cm5ws47ny000a0cjrdz99ex7y', label: 'Bank of Baroda' },
+    { value: 'cm5ws4ge9000b0cjr0wnj8wun', label: 'Kotak Mahindra Bank' },
+    { value: 'cm5ws4nu6000c0cjrgat51n67', label: 'Yes Bank' },
+    { value: 'cm5ws4siw000d0cjr2drmhuay', label: 'Bank of India' },
+    { value: 'cm5ws4yp2000f0cjrau4z59qt', label: 'Federal Bank' },
+    { value: 'cm5ws5f30000g0cjr6npx19bs', label: 'Punjab National Bank' },
   ];
 
   const currencies = [
@@ -59,7 +84,7 @@ function BankAccountCreate() {
     { value: 'EUR', label: 'EUR' },
   ];
 
-  const statuses = [
+  const Statuses = [
     { value: 'ACTIVE', label: 'ACTIVE' },
     { value: 'INACTIVE', label: 'INACTIVE' },
     { value: 'DORMANT', label: 'DORMANT' },
@@ -74,16 +99,16 @@ function BankAccountCreate() {
         className='w-full lg:w-1/2 flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg'
       >
         <div>
-          <label htmlFor='bankID' className='label text-sm font-medium text-gray-700'>
+          <label htmlFor='BankID' className='label text-sm font-medium text-gray-700'>
             Bank
           </label>
           <select
-            id='bankID'
-            name='bankID'
+            id='BankID'
+            name='BankID'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.bankID}
-            className={`select select-bordered mt-1 block w-full border ${formik.touched.bankID && formik.errors.bankID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.BankID}
+            className={`select select-bordered mt-1 block w-full border ${formik.touched.BankID && formik.errors.BankID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a bank</option>
             {banks.map((bank) => (
@@ -92,92 +117,92 @@ function BankAccountCreate() {
               </option>
             ))}
           </select>
-          {formik.touched.bankID && formik.errors.bankID ? (
-            <div className='text-red-500 text-sm mt-1'>{formik.errors.bankID}</div>
+          {formik.touched.BankID && formik.errors.BankID ? (
+            <div className='text-red-500 text-sm mt-1'>{formik.errors.BankID}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='accountNumber' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='AccountNumber' className='block text-sm font-medium text-gray-700'>
             Account Number
           </label>
           <input
-            id='accountNumber'
-            name='accountNumber'
+            id='AccountNumber'
+            name='AccountNumber'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.accountNumber}
-            className={`input input-bordered mt-1 block w-full border ${formik.touched.accountNumber && formik.errors.accountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.AccountNumber}
+            className={`input input-bordered mt-1 block w-full border ${formik.touched.AccountNumber && formik.errors.AccountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.accountNumber && formik.errors.accountNumber ? (
-            <div className='text-red-500 text-sm mt-1'>{formik.errors.accountNumber}</div>
+          {formik.touched.AccountNumber && formik.errors.AccountNumber ? (
+            <div className='text-red-500 text-sm mt-1'>{formik.errors.AccountNumber}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='balance' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Balance' className='block text-sm font-medium text-gray-700'>
             Balance
           </label>
           <input
-            id='balance'
-            name='balance'
+            id='Balance'
+            name='Balance'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.balance}
-            className={`input input-bordered mt-1 block w-full border ${formik.touched.balance && formik.errors.balance ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Balance}
+            className={`input input-bordered mt-1 block w-full border ${formik.touched.Balance && formik.errors.Balance ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.balance && formik.errors.balance ? (
-            <div className='text-red-500 text-sm mt-1'>{formik.errors.balance}</div>
+          {formik.touched.Balance && formik.errors.Balance ? (
+            <div className='text-red-500 text-sm mt-1'>{formik.errors.Balance}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='currency' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Currency' className='block text-sm font-medium text-gray-700'>
             Currency
           </label>
           <select
-            id='currency'
-            name='currency'
+            id='Currency'
+            name='Currency'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.currency}
-            className={`select select-bordered mt-1 block w-full border ${formik.touched.currency && formik.errors.currency ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Currency}
+            className={`select select-bordered mt-1 block w-full border ${formik.touched.Currency && formik.errors.Currency ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
-            <option value=''>Select a currency</option>
-            {currencies.map((currency) => (
-              <option key={currency.value} value={currency.value}>
-                {currency.label}
+            <option value=''>Select a Currency</option>
+            {currencies.map((Currency) => (
+              <option key={Currency.value} value={Currency.value}>
+                {Currency.label}
               </option>
             ))}
           </select>
-          {formik.touched.currency && formik.errors.currency ? (
-            <div className='text-red-500 text-sm mt-1'>{formik.errors.currency}</div>
+          {formik.touched.Currency && formik.errors.Currency ? (
+            <div className='text-red-500 text-sm mt-1'>{formik.errors.Currency}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='status' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Status' className='block text-sm font-medium text-gray-700'>
             Status
           </label>
           <select
-            id='status'
-            name='status'
+            id='Status'
+            name='Status'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.status}
-            className={`select select-bordered mt-1 block w-full border ${formik.touched.status && formik.errors.status ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Status}
+            className={`select select-bordered mt-1 block w-full border ${formik.touched.Status && formik.errors.Status ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
-            <option value=''>Select a status</option>
-            {statuses.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.label}
+            <option value=''>Select a Status</option>
+            {Statuses.map((Status) => (
+              <option key={Status.value} value={Status.value}>
+                {Status.label}
               </option>
             ))}
           </select>
-          {formik.touched.status && formik.errors.status ? (
-            <div className='text-red-500 text-sm mt-1'>{formik.errors.status}</div>
+          {formik.touched.Status && formik.errors.Status ? (
+            <div className='text-red-500 text-sm mt-1'>{formik.errors.Status}</div>
           ) : null}
         </div>
 
