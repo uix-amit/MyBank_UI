@@ -1,19 +1,22 @@
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { CreateTransactionConfig } from '@shared/models';
+import axiosInstance from '@utils/axiosInstance';
 
 function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      fromAccountID: '',
-      toAccountID: '',
-      amount: '',
+      FromAccountID: '',
+      ToAccountID: '',
+      Amount: '',
     },
     validationSchema: Yup.object({
-      fromAccountID: Yup.string().required('From Account ID is required'),
-      toAccountID: Yup.string().required('To Account ID is required'),
-      amount: Yup.string()
+      FromAccountID: Yup.string().required('From Account ID is required'),
+      ToAccountID: Yup.string().required('To Account ID is required'),
+      Amount: Yup.string()
         .matches(/^\d*\.?\d{0,2}$/, 'Amount must be a valid number with up to 2 decimal places')
         .required('Amount is required')
         .test('positive', 'Amount must be a positive number', (value) => {
@@ -22,7 +25,10 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
         }),
     }),
     onSubmit: (values) => {
-      console.log('Form data', values);
+      axiosInstance
+        .post('/transactions', { ...values, Amount: parseFloat(values.Amount) })
+        .then(() => navigate('/transaction'))
+        .catch();
     },
   });
 
@@ -36,16 +42,16 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
       className='w-full lg:w-1/2 flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg'
     >
       <div>
-        <label htmlFor='fromAccountID' className='block text-sm font-medium text-gray-700'>
+        <label htmlFor='FromAccountID' className='block text-sm font-medium text-gray-700'>
           From Account
         </label>
         <select
-          id='fromAccountID'
-          name='fromAccountID'
+          id='FromAccountID'
+          name='FromAccountID'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.fromAccountID}
-          className={`mt-1 block w-full select select-bordered ${formik.touched.fromAccountID && formik.errors.fromAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+          value={formik.values.FromAccountID}
+          className={`mt-1 block w-full select select-bordered ${formik.touched.FromAccountID && formik.errors.FromAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         >
           <option value=''>Select a from account</option>
           {config.fromAccountIDs.map((account) => (
@@ -54,22 +60,22 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
             </option>
           ))}
         </select>
-        {formik.touched.fromAccountID && formik.errors.fromAccountID ? (
-          <div className='text-red-500 text-sm'>{formik.errors.fromAccountID}</div>
+        {formik.touched.FromAccountID && formik.errors.FromAccountID ? (
+          <div className='text-red-500 text-sm'>{formik.errors.FromAccountID}</div>
         ) : null}
       </div>
 
       <div>
-        <label htmlFor='toAccountID' className='block text-sm font-medium text-gray-700'>
+        <label htmlFor='ToAccountID' className='block text-sm font-medium text-gray-700'>
           To Account
         </label>
         <select
-          id='toAccountID'
-          name='toAccountID'
+          id='ToAccountID'
+          name='ToAccountID'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.toAccountID}
-          className={`mt-1 block w-full select select-bordered ${formik.touched.toAccountID && formik.errors.toAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+          value={formik.values.ToAccountID}
+          className={`mt-1 block w-full select select-bordered ${formik.touched.ToAccountID && formik.errors.ToAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         >
           <option value=''>Select a to account</option>
           {config.toAccountIDs.map((account) => (
@@ -78,26 +84,26 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
             </option>
           ))}
         </select>
-        {formik.touched.toAccountID && formik.errors.toAccountID ? (
-          <div className='text-red-500 text-sm'>{formik.errors.toAccountID}</div>
+        {formik.touched.ToAccountID && formik.errors.ToAccountID ? (
+          <div className='text-red-500 text-sm'>{formik.errors.ToAccountID}</div>
         ) : null}
       </div>
 
       <div>
-        <label htmlFor='amount' className='block text-sm font-medium text-gray-700'>
+        <label htmlFor='Amount' className='block text-sm font-medium text-gray-700'>
           Amount
         </label>
         <input
-          id='amount'
-          name='amount'
+          id='Amount'
+          name='Amount'
           type='text'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.amount}
-          className={`mt-1 block w-full input input-bordered ${formik.touched.amount && formik.errors.amount ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+          value={formik.values.Amount}
+          className={`mt-1 block w-full input input-bordered ${formik.touched.Amount && formik.errors.Amount ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         />
-        {formik.touched.amount && formik.errors.amount ? (
-          <div className='text-red-500 text-sm'>{formik.errors.amount}</div>
+        {formik.touched.Amount && formik.errors.Amount ? (
+          <div className='text-red-500 text-sm'>{formik.errors.Amount}</div>
         ) : null}
       </div>
 

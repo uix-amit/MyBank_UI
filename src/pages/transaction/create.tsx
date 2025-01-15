@@ -14,10 +14,9 @@ function TransactionCreate() {
   }, [dispatch]);
 
   const accountIDs = [
-    { value: '1234567890abcdef', label: '1234567890abcdef' },
-    { value: '0987654321fedcba', label: '0987654321fedcba' },
-    { value: 'abcdef1234567890', label: 'abcdef1234567890' },
-    { value: 'fedcba0987654321', label: 'fedcba0987654321' },
+    { value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' },
+    { value: 'cm5wsluz50001ycfakwn8bwkz', label: '1234512345123451' },
+    { value: 'cm5xsvp1p0009uu2p5fzpp2m4', label: '1234512345123459' },
   ];
 
   const config: CreateTransactionConfig = {
