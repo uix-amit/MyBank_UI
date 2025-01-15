@@ -1,12 +1,15 @@
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import axiosInstance from '@utils/axiosInstance';
 
 function LoanAccountCreate() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -19,24 +22,24 @@ function LoanAccountCreate() {
 
   const formik = useFormik({
     initialValues: {
-      bankID: '',
-      accountNumber: '',
-      loanType: '',
-      loanAmount: '',
-      interestRate: '',
-      loanTerm: '',
+      BankID: '',
+      AccountNumber: '',
+      LoanType: '',
+      LoanAmount: '',
+      InterestRate: '',
+      LoanTerm: '',
     },
     validationSchema: Yup.object({
-      bankID: Yup.string().required('Bank is required'),
-      accountNumber: Yup.string()
+      BankID: Yup.string().required('Bank is required'),
+      AccountNumber: Yup.string()
         .matches(/^\d{16}$/, 'Account number must be exactly 16 digits')
         .required('Account number is required'),
-      loanType: Yup.string().required('Loan type is required'),
-      loanAmount: Yup.number()
+      LoanType: Yup.string().required('Loan type is required'),
+      LoanAmount: Yup.number()
         .typeError('Loan amount must be a number')
         .required('Loan amount is required')
         .positive('Loan amount must be a positive number'),
-      interestRate: Yup.number()
+      InterestRate: Yup.number()
         .typeError('Interest rate must be a number')
         .required('Interest rate is required')
         .positive('Interest rate must be a positive number')
@@ -46,24 +49,39 @@ function LoanAccountCreate() {
           'Interest rate must have at most 2 decimal places',
           (value) => value === undefined || value.toString().split('.')[1]?.length <= 2
         ),
-      loanTerm: Yup.number()
+      LoanTerm: Yup.number()
         .typeError('Loan term must be a number')
         .required('Loan term is required')
         .positive('Loan term must be a positive number')
         .max(30, 'Loan term cannot exceed 30 years'),
     }),
     onSubmit: (values) => {
-      console.log('Form data', values);
+      axiosInstance
+        .post('/loans', {
+          ...values,
+          LoanTerm: parseInt(values.LoanTerm),
+          LoanAmount: parseFloat(values.LoanAmount),
+          InterestRate: parseFloat(values.InterestRate),
+        })
+        .then(() => navigate('/loan-account'))
+        .catch(console.error);
     },
   });
 
   const banks = [
-    { value: 'icici', label: 'ICICI' },
-    { value: 'hdfc', label: 'HDFC' },
-    { value: 'sbi', label: 'SBI' },
+    { value: 'cm5ws2j1s00040cjrb7aye7zq', label: 'State Bank of India' },
+    { value: 'cm5ws2y3f00050cjr77q0d8fg', label: 'HDFC Bank' },
+    { value: 'cm5ws36d300070cjrbavq6sln', label: 'ICICI Bank' },
+    { value: 'cm5ws3tqh00080cjr3ljq6pyp', label: 'Axis Bank' },
+    { value: 'cm5ws47ny000a0cjrdz99ex7y', label: 'Bank of Baroda' },
+    { value: 'cm5ws4ge9000b0cjr0wnj8wun', label: 'Kotak Mahindra Bank' },
+    { value: 'cm5ws4nu6000c0cjrgat51n67', label: 'Yes Bank' },
+    { value: 'cm5ws4siw000d0cjr2drmhuay', label: 'Bank of India' },
+    { value: 'cm5ws4yp2000f0cjrau4z59qt', label: 'Federal Bank' },
+    { value: 'cm5ws5f30000g0cjr6npx19bs', label: 'Punjab National Bank' },
   ];
 
-  const loanTypes = [
+  const LoanTypes = [
     { value: 'HOME', label: 'HOME' },
     { value: 'VEHICLE', label: 'VEHICLE' },
     { value: 'GOLD', label: 'GOLD' },
@@ -79,16 +97,16 @@ function LoanAccountCreate() {
         className='w-full lg:w-1/2 flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg'
       >
         <div>
-          <label htmlFor='bankID' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='BankID' className='block text-sm font-medium text-gray-700'>
             Bank
           </label>
           <select
-            id='bankID'
-            name='bankID'
+            id='BankID'
+            name='BankID'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.bankID}
-            className={`mt-1 block w-full select select-bordered ${formik.touched.bankID && formik.errors.bankID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.BankID}
+            className={`mt-1 block w-full select select-bordered ${formik.touched.BankID && formik.errors.BankID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a bank</option>
             {banks.map((bank) => (
@@ -97,104 +115,104 @@ function LoanAccountCreate() {
               </option>
             ))}
           </select>
-          {formik.touched.bankID && formik.errors.bankID ? (
-            <div className='text-red-500 text-sm'>{formik.errors.bankID}</div>
+          {formik.touched.BankID && formik.errors.BankID ? (
+            <div className='text-red-500 text-sm'>{formik.errors.BankID}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='accountNumber' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='AccountNumber' className='block text-sm font-medium text-gray-700'>
             Account Number
           </label>
           <input
-            id='accountNumber'
-            name='accountNumber'
+            id='AccountNumber'
+            name='AccountNumber'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.accountNumber}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.accountNumber && formik.errors.accountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.AccountNumber}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.AccountNumber && formik.errors.AccountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.accountNumber && formik.errors.accountNumber ? (
-            <div className='text-red-500 text-sm'>{formik.errors.accountNumber}</div>
+          {formik.touched.AccountNumber && formik.errors.AccountNumber ? (
+            <div className='text-red-500 text-sm'>{formik.errors.AccountNumber}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='loanType' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='LoanType' className='block text-sm font-medium text-gray-700'>
             Loan Type
           </label>
           <select
-            id='loanType'
-            name='loanType'
+            id='LoanType'
+            name='LoanType'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.loanType}
-            className={`mt-1 block w-full select select-bordered ${formik.touched.loanType && formik.errors.loanType ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.LoanType}
+            className={`mt-1 block w-full select select-bordered ${formik.touched.LoanType && formik.errors.LoanType ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a loan type</option>
-            {loanTypes.map((type) => (
+            {LoanTypes.map((type) => (
               <option key={type.value} value={type.value}>
                 {type.label}
               </option>
             ))}
           </select>
-          {formik.touched.loanType && formik.errors.loanType ? (
-            <div className='text-red-500 text-sm'>{formik.errors.loanType}</div>
+          {formik.touched.LoanType && formik.errors.LoanType ? (
+            <div className='text-red-500 text-sm'>{formik.errors.LoanType}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='loanAmount' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='LoanAmount' className='block text-sm font-medium text-gray-700'>
             Loan Amount
           </label>
           <input
-            id='loanAmount'
-            name='loanAmount'
+            id='LoanAmount'
+            name='LoanAmount'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.loanAmount}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.loanAmount && formik.errors.loanAmount ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.LoanAmount}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.LoanAmount && formik.errors.LoanAmount ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.loanAmount && formik.errors.loanAmount ? (
-            <div className='text-red-500 text-sm'>{formik.errors.loanAmount}</div>
+          {formik.touched.LoanAmount && formik.errors.LoanAmount ? (
+            <div className='text-red-500 text-sm'>{formik.errors.LoanAmount}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='interestRate' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='InterestRate' className='block text-sm font-medium text-gray-700'>
             Interest Rate
           </label>
           <input
-            id='interestRate'
-            name='interestRate'
+            id='InterestRate'
+            name='InterestRate'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.interestRate}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.interestRate && formik.errors.interestRate ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.InterestRate}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.InterestRate && formik.errors.InterestRate ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.interestRate && formik.errors.interestRate ? (
-            <div className='text-red-500 text-sm'>{formik.errors.interestRate}</div>
+          {formik.touched.InterestRate && formik.errors.InterestRate ? (
+            <div className='text-red-500 text-sm'>{formik.errors.InterestRate}</div>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor='loanTerm' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='LoanTerm' className='block text-sm font-medium text-gray-700'>
             Loan Term
           </label>
           <input
-            id='loanTerm'
-            name='loanTerm'
+            id='LoanTerm'
+            name='LoanTerm'
             type='text'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.loanTerm}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.loanTerm && formik.errors.loanTerm ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.LoanTerm}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.LoanTerm && formik.errors.LoanTerm ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.loanTerm && formik.errors.loanTerm ? (
-            <div className='text-red-500 text-sm'>{formik.errors.loanTerm}</div>
+          {formik.touched.LoanTerm && formik.errors.LoanTerm ? (
+            <div className='text-red-500 text-sm'>{formik.errors.LoanTerm}</div>
           ) : null}
         </div>
 
