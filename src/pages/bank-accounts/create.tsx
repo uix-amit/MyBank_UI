@@ -44,15 +44,7 @@ function BankAccountCreate() {
     }),
     onSubmit: (values) => {
       axiosInstance
-        .post(
-          '/savings-account',
-          { ...values, Balance: parseFloat(values.Balance) },
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
-            },
-          }
-        )
+        .post('/savings-account', { ...values, Balance: parseFloat(values.Balance) })
         .then((data) => {
           console.log(data);
 
