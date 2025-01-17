@@ -26,7 +26,10 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
     }),
     onSubmit: (values) => {
       axiosInstance
-        .post('/transactions', { ...values, Amount: parseFloat(values.Amount) })
+        .post(config.transactionType === 'LoanRepayment' ? '/loan-transactions' : '/transactions', {
+          ...values,
+          Amount: parseFloat(values.Amount),
+        })
         .then(() => navigate('/transaction'))
         .catch();
     },
