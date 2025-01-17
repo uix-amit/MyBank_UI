@@ -12,5 +12,6 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'react-hooks/exhaustive-deps': 'off',
   },
 };

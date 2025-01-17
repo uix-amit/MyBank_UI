@@ -25,68 +25,68 @@ export interface UpdateUserDto {
      * @memberof UpdateUserDto
      * @example c3c85fbf-042e-46be-9ad2-d8bbe5b1de7d
      */
-    userID: string;
+    UserID: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example John
      */
-    firstName?: string;
+    FirstName?: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example Doe
      */
-    lastName?: string;
+    LastName?: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example JohnDoe
      */
-    userName: string;
+    UserName: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example john.doe@gmail.com
      */
-    email?: string;
+    Email?: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example xxxxxxxx
      */
-    password?: string;
+    Password?: string;
 
     /**
      * @type {string}
      * @memberof UpdateUserDto
      * @example 1234123423
      */
-    phoneNumber?: string;
+    PhoneNumber?: string;
 
     /**
      * @type {Date}
      * @memberof UpdateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    dateOfBirth?: Date;
+    DateOfBirth?: Date;
 
     /**
      * @type {Date}
      * @memberof UpdateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    createdAt?: Date;
+    CreatedAt?: Date;
 
     /**
      * @type {Date}
      * @memberof UpdateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    updatedAt?: Date;
+    UpdatedAt?: Date;
 }
