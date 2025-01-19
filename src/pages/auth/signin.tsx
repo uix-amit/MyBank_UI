@@ -35,6 +35,8 @@ function Signin() {
     },
   });
 
+  sessionStorage.removeItem('jwt');
+
   return (
     <div className='flex flex-col w-full lg:w-sm px-4 max-w-md m-auto'>
       <h2 className='text-4xl mb-4 text-white text-center'>Login</h2>

@@ -1,20 +1,24 @@
+import axiosInstance from '@utils/axiosInstance';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 
 function ChangePassword() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [userID, setUserID] = useState(null);
   const formik = useFormik({
     initialValues: {
-      password: '',
+      Password: '',
       confirmPassword: '',
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      Password: Yup.string()
         .required('Password is required')
         .min(8, 'Password must be at least 8 characters long')
         .max(32, 'Password must be at most 32 characters long')
@@ -23,11 +27,14 @@ function ChangePassword() {
         .matches(/[0-9]/, 'Password must contain at least one number')
         .matches(/[\W_]/, 'Password must contain at least one special character'),
       confirmPassword: Yup.string()
-        .required('Confirm password is required')
-        .oneOf([Yup.ref('password'), ''], 'Passwords must match'),
+        .required('Confirm Password is required')
+        .oneOf([Yup.ref('Password'), ''], 'Passwords must match'),
     }),
-    onSubmit: (values) => {
-      console.log('Password updated:', values);
+    onSubmit: ({ Password }) => {
+      axiosInstance
+        .patch(`/users/${userID}`, { Password, UserID: userID })
+        .then(() => navigate('/auth'))
+        .catch(console.error);
     },
     onReset: () => {
       formik.resetForm();
@@ -35,8 +42,16 @@ function ChangePassword() {
   });
 
   useEffect(() => {
-    dispatch(setTitle('change password'));
+    dispatch(setTitle('change Password'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/users')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then(({ UserID }: any) => setUserID(UserID))
+      .catch(console.error);
+  }, []);
 
   return (
     <>
@@ -46,20 +61,20 @@ function ChangePassword() {
         className='w-full lg:w-1/2 flex gap-4 flex-col bg-white p-4 rounded-lg shadow-lg'
       >
         <div>
-          <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+          <label htmlFor='Password' className='block text-sm font-medium text-gray-700'>
             Password
           </label>
           <input
-            id='password'
-            name='password'
+            id='Password'
+            name='Password'
             type='password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.password}
-            className={`mt-1 block w-full input input-bordered ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
+            value={formik.values.Password}
+            className={`mt-1 block w-full input input-bordered ${formik.touched.Password && formik.errors.Password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           />
-          {formik.touched.password && formik.errors.password ? (
-            <div className='text-red-500 text-sm'>{formik.errors.password}</div>
+          {formik.touched.Password && formik.errors.Password ? (
+            <div className='text-red-500 text-sm'>{formik.errors.Password}</div>
           ) : null}
         </div>
 
@@ -70,7 +85,7 @@ function ChangePassword() {
           <input
             id='confirmPassword'
             name='confirmPassword'
-            type='password'
+            type='Password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.confirmPassword}
