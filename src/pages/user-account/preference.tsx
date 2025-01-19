@@ -1,37 +1,58 @@
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import axiosInstance from '@utils/axiosInstance';
 
 function Preference() {
+  const [accountPreferenceID, setAccountPreferenceID] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const formik = useFormik({
     initialValues: {
-      currency: '',
-      twoFAEnabled: false,
-      smsEnabled: false,
-      emailEnabled: false,
+      EnableTwoFactorAuth: false,
+      SMSNotifications: false,
+      EmailNotifications: false,
     },
     validationSchema: Yup.object({
-      currency: Yup.string().required('Currency is required'),
-      twoFAEnabled: Yup.boolean().required('Two-factor authentication is required'),
-      smsEnabled: Yup.boolean().required('SMS notifications are required'),
-      emailEnabled: Yup.boolean().required('Email notifications are required'),
+      EnableTwoFactorAuth: Yup.boolean().notRequired(),
+      SMSNotifications: Yup.boolean().notRequired(),
+      EmailNotifications: Yup.boolean().notRequired(),
     }),
     onSubmit: (values) => {
-      console.log('Profile updated:', values);
+      axiosInstance
+        .patch(`account-preferences/${accountPreferenceID}`, values)
+        .then(() => navigate('/'))
+        .catch(console.error);
     },
     onReset: () => {
       formik.resetForm();
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCheckboxChange = (event: any) => {
+    formik.setFieldValue(event.target.name, event.target.checked);
+  };
+
   useEffect(() => {
     dispatch(setTitle('preferences'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/account-preferences')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((preferences: any) => {
+        setAccountPreferenceID(preferences.AccountPreferenceID);
+        formik.setValues(preferences);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <>
@@ -40,81 +61,58 @@ function Preference() {
         onSubmit={formik.handleSubmit}
         className='w-full lg:w-1/2 flex flex-col gap-4 bg-white p-4 rounded-lg shadow-lg'
       >
-        <div>
-          <label htmlFor='currency' className='block text-sm font-medium text-gray-700'>
-            Currency
-          </label>
-          <select
-            id='currency'
-            name='currency'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.currency}
-            className={`mt-1 block w-full select select-bordered ${formik.touched.currency && formik.errors.currency ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
-          >
-            <option value=''>Select a currency</option>
-            <option value='inr'>INR</option>
-            <option value='gbp'>GBP</option>
-            <option value='usd'>USD</option>
-            <option value='aud'>AUD</option>
-            <option value='jpy'>JPY</option>
-            <option value='eur'>EUR</option>
-          </select>
-          {formik.touched.currency && formik.errors.currency ? (
-            <div className='text-red-500 text-sm'>{formik.errors.currency}</div>
-          ) : null}
-        </div>
         <h3 className='text-base font-bold'>Two Factor Authentication Setting</h3>
+        <pre>{formik.values.EnableTwoFactorAuth}</pre>
         <div className='flex items-center justify-between'>
-          <label htmlFor='twoFAEnabled' className='mr-2'>
-            Enable Two-Factor Authentication
+          <label htmlFor='EnableTwoFactorAuth' className='mr-2'>
+            Enable Two-Factor Authentication {formik.values.EnableTwoFactorAuth}
           </label>
           <input
-            id='twoFAEnabled'
-            name='twoFAEnabled'
+            id='EnableTwoFactorAuth'
+            name='EnableTwoFactorAuth'
             type='checkbox'
-            onChange={formik.handleChange}
+            onChange={handleCheckboxChange}
             onBlur={formik.handleBlur}
-            checked={formik.values.twoFAEnabled}
-            className={`toggle toggle-primary ${formik.touched.twoFAEnabled && formik.errors.twoFAEnabled ? 'border-red-500' : ''}`}
+            checked={formik.values.EnableTwoFactorAuth}
+            className={`toggle toggle-primary ${formik.touched.EnableTwoFactorAuth && formik.errors.EnableTwoFactorAuth ? 'border-red-500' : ''}`}
           />
-          {formik.touched.twoFAEnabled && formik.errors.twoFAEnabled ? (
-            <div className='text-red-500 text-sm'>{formik.errors.twoFAEnabled}</div>
+          {formik.touched.EnableTwoFactorAuth && formik.errors.EnableTwoFactorAuth ? (
+            <div className='text-red-500 text-sm'>{formik.errors.EnableTwoFactorAuth}</div>
           ) : null}
         </div>
         <h3 className='text-base font-bold'>Notification Settings</h3>
         <div className='flex items-center justify-between'>
-          <label htmlFor='smsEnabled' className='mr-2'>
+          <label htmlFor='SMSNotifications' className='mr-2'>
             Enable SMS Notifications
           </label>
           <input
-            id='smsEnabled'
-            name='smsEnabled'
+            id='SMSNotifications'
+            name='SMSNotifications'
             type='checkbox'
-            onChange={formik.handleChange}
+            onChange={handleCheckboxChange}
             onBlur={formik.handleBlur}
-            checked={formik.values.smsEnabled}
-            className={`toggle toggle-primary ${formik.touched.smsEnabled && formik.errors.smsEnabled ? 'border-red-500' : ''}`}
+            checked={formik.values.SMSNotifications}
+            className={`toggle toggle-primary ${formik.touched.SMSNotifications && formik.errors.SMSNotifications ? 'border-red-500' : ''}`}
           />
-          {formik.touched.smsEnabled && formik.errors.smsEnabled ? (
-            <div className='text-red-500 text-sm'>{formik.errors.smsEnabled}</div>
+          {formik.touched.SMSNotifications && formik.errors.SMSNotifications ? (
+            <div className='text-red-500 text-sm'>{formik.errors.SMSNotifications}</div>
           ) : null}
         </div>
         <div className='flex items-center justify-between'>
-          <label htmlFor='emailEnabled' className='mr-2'>
+          <label htmlFor='EmailNotifications' className='mr-2'>
             Enable Email Notifications
           </label>
           <input
-            id='emailEnabled'
-            name='emailEnabled'
+            id='EmailNotifications'
+            name='EmailNotifications'
             type='checkbox'
-            onChange={formik.handleChange}
+            onChange={handleCheckboxChange}
             onBlur={formik.handleBlur}
-            checked={formik.values.emailEnabled}
-            className={`toggle toggle-primary ${formik.touched.emailEnabled && formik.errors.emailEnabled ? 'border-red-500' : ''}`}
+            checked={formik.values.EmailNotifications}
+            className={`toggle toggle-primary ${formik.touched.EmailNotifications && formik.errors.EmailNotifications ? 'border-red-500' : ''}`}
           />
-          {formik.touched.emailEnabled && formik.errors.emailEnabled ? (
-            <div className='text-red-500 text-sm'>{formik.errors.emailEnabled}</div>
+          {formik.touched.EmailNotifications && formik.errors.EmailNotifications ? (
+            <div className='text-red-500 text-sm'>{formik.errors.EmailNotifications}</div>
           ) : null}
         </div>
         <div className='flex flex-col-reverse lg:flex-row gap-4'>

@@ -20,7 +20,14 @@ function Signin() {
       console.log('Form data', values);
       axios
         .post(`${baseUrl}/auth/login`, values)
-        .then(({ data }) => navigate(`/auth/2fa?id=${data.id}`))
+        .then(({ data }) => {
+          if (data.id) {
+            navigate(`/auth/2fa?id=${data.id}`);
+          } else {
+            sessionStorage.setItem('jwt', data.access_token);
+            navigate('/');
+          }
+        })
         .catch((error) => console.log(error));
     },
     onReset: () => {
