@@ -1,7 +1,13 @@
 import { UpdateAccountDto } from '@shared/models';
 import { format } from 'date-fns';
 
-function AccountsTable({ accounts }: { accounts: UpdateAccountDto[] }) {
+function AccountsTable({
+  accounts,
+}: {
+  accounts: Array<UpdateAccountDto & { Bank: { BankName: string } }>;
+}) {
+  console.table(accounts);
+
   return (
     <div className='overflow-x-auto shadow rounded-lg'>
       <table className='table w-full'>
@@ -17,33 +23,33 @@ function AccountsTable({ accounts }: { accounts: UpdateAccountDto[] }) {
         </thead>
         <tbody>
           {accounts.map((account, index) => (
-            <tr key={account.accountID} className='hover:bg-gray-200 bg-white'>
+            <tr key={account.AccountID} className='hover:bg-gray-200 bg-white'>
               <td className={index === accounts.length - 1 ? 'rounded-b-lg' : 'border-b'}>
-                {account.bankID}
+                {account.Bank.BankName}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
-                {account.accountNumber}
+                {account.AccountNumber}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
-                {account.balance.toFixed(2)}
+                {account.Balance.toFixed(2)}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
-                {account.currency}
+                {account.Currency}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
-                {format(account.createdAt, 'dd/MM/yyyy HH:mm:ss')}
+                {format(account.CreatedAt, 'dd/MM/yyyy HH:mm:ss')}
               </td>
               <td className={index === accounts.length - 1 ? 'rounded-br-lg' : 'border-b'}>
                 <span
                   className={`badge ${
-                    account.status === 'INACTIVE'
+                    account.Status === 'INACTIVE'
                       ? 'badge-warning'
-                      : account.status === 'ACTIVE'
+                      : account.Status === 'ACTIVE'
                         ? 'badge-success'
                         : 'badge-error'
                   }`}
                 >
-                  {account.status}
+                  {account.Status}
                 </span>
               </td>
             </tr>

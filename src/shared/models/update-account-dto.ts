@@ -26,59 +26,59 @@ export interface UpdateAccountDto {
    * @memberof UpdateAccountDto
    * @example b8fb4b35-0843-44f3-a5c9-d18a40bcfa62
    */
-  accountID: string;
+  AccountID: string;
 
   /**
    * @type {string}
    * @memberof UpdateAccountDto
    * @example ae7a58cd-4696-4984-a954-f34b1a8af470
    */
-  userID: string;
+  UserID: string;
 
   /**
    * @type {string}
    * @memberof UpdateAccountDto
    * @example fa24327f-d930-4ecf-b024-3ce8527b2e3d
    */
-  bankID: string;
+  BankID: string;
 
   /**
    * @type {string}
    * @memberof UpdateAccountDto
    * @example 1234098776541234
    */
-  accountNumber: string;
+  AccountNumber: string;
 
   /**
    * @type {number}
    * @memberof UpdateAccountDto
    * @example 1000
    */
-  balance: number;
+  Balance: number;
 
   /**
    * @type {Currency}
    * @memberof UpdateAccountDto
    */
-  currency: Currency;
+  Currency: Currency;
 
   /**
    * @type {AccoutStatus}
    * @memberof UpdateAccountDto
    */
-  status: AccoutStatus;
+  Status: AccoutStatus;
 
   /**
    * @type {Date}
    * @memberof UpdateAccountDto
    * @example 2024-07-10T06:52:41.054Z
    */
-  createdAt: Date;
+  CreatedAt: Date;
 
   /**
    * @type {Date}
    * @memberof UpdateAccountDto
    * @example 2024-07-10T06:52:41.054Z
    */
-  updatedAt: Date;
+  UpdatedAt: Date;
 }

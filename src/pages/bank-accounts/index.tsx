@@ -1,19 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { accounts } from '@assets/stubs/fake-data';
 import AccountsTable from '@components/accounts-table';
 import Stats from '@components/stats';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { Link } from 'react-router-dom';
+import axiosInstance from '@utils/axiosInstance';
 
 function BankAccount() {
+  const [accounts, setAccounts] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(setTitle('savings account'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/savings-account')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((data: any) => setAccounts(data))
+      .catch(console.error);
+  }, []);
 
   return (
     <>

@@ -61,8 +61,8 @@ function Dashboard() {
           </div>
           <div className='flex flex-col lg:flex-row gap-4 w-full'>
             {accounts.map((account) => (
-              <div className='w-full lg:w-1/2 min-w-80'>
-                <BankCard key={account.accountID} account={account} />
+              <div key={account.accountID} className='w-full lg:w-1/2 min-w-80'>
+                <BankCard account={account} />
               </div>
             ))}
           </div>
