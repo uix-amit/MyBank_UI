@@ -1,12 +1,14 @@
 import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { CreateTransactionConfig } from '@shared/models';
-import axiosInstance from '@utils/axiosInstance';
+import { createTransaction } from '@shared/store/transaction.slice';
 
 function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       FromAccountID: '',
@@ -25,13 +27,13 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
         }),
     }),
     onSubmit: (values) => {
-      axiosInstance
-        .post(config.transactionType === 'LoanRepayment' ? '/loan-transactions' : '/transactions', {
+      dispatch(
+        createTransaction({
           ...values,
           Amount: parseFloat(values.Amount),
         })
-        .then(() => navigate('/transaction'))
-        .catch();
+      );
+      navigate('/transaction/payment');
     },
   });
 

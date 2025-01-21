@@ -17,6 +17,7 @@ import LoanTransaction from '@loanTransaction/index';
 import Notifications from '@notifications/index';
 import TransactionCreate from '@transaction/create';
 import Transaction from '@transaction/index';
+import Payment from '@transaction/payment';
 import ChangePassword from '@userAccount/change-password';
 import Preference from '@userAccount/preference';
 import Profile from '@userAccount/profile';
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
           {
             path: 'create',
             element: <TransactionCreate />,
+          },
+          {
+            path: 'payment',
+            element: <Payment />,
           },
         ],
       },
