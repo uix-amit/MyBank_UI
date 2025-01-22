@@ -24,28 +24,28 @@ export interface UpdateCardDto {
    * @memberof UpdateCardDto
    * @example 6a4d6c53-4fe7-4648-9d5e-49faefc85b44
    */
-  cardID: string;
+  CardID: string;
 
   /**
    * @type {string}
    * @memberof UpdateCardDto
    * @example 1e364f38-1d7c-4881-b842-663a7855ba45
    */
-  accountID: string;
+  AccountID: string;
 
   /**
    * @type {string}
    * @memberof UpdateCardDto
    * @example 4111111111111111
    */
-  cardNumber: string;
+  CardNumber: string;
 
   /**
    * @type {Date}
    * @memberof UpdateCardDto
    * @example 2024-07-10T06:52:41.153Z
    */
-  expirationDate: Date;
+  ExpirationDate: Date;
 
   /**
    * @type {number}
@@ -59,12 +59,12 @@ export interface UpdateCardDto {
    * @memberof UpdateCardDto
    * @example 2024-07-10T06:52:41.153Z
    */
-  createdAt: Date;
+  CreatedAt: Date;
 
   /**
    * @type {Date}
    * @memberof UpdateCardDto
    * @example 2024-07-10T06:52:41.153Z
    */
-  updatedAt: Date;
+  UpdatedAt: Date;
 }

@@ -12,7 +12,7 @@ function CardItem({ card }: { card: UpdateCardDto }) {
       </div>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Card Number</div>
-        <div className='text-gray-800'>{formatAccountNumber(card.cardNumber)}</div>
+        <div className='text-gray-800'>{formatAccountNumber(card.CardNumber)}</div>
       </div>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Card Holder</div>

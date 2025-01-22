@@ -25,21 +25,21 @@ export interface CreateCardDto {
      * @memberof CreateCardDto
      * @example 3abecb07-ce94-4fb6-9988-d2fbcac571ad
      */
-    accountID: string;
+    AccountID: string;
 
     /**
      * @type {string}
      * @memberof CreateCardDto
      * @example 411111111111
      */
-    cardNumber: string;
+    CardNumber: string;
 
     /**
      * @type {Date}
      * @memberof CreateCardDto
      * @example 2024-07-10T06:52:41.152Z
      */
-    expirationDate: Date;
+    ExpirationDate: Date;
 
     /**
      * @type {number}
@@ -53,12 +53,12 @@ export interface CreateCardDto {
      * @memberof CreateCardDto
      * @example 2024-07-10T06:52:41.152Z
      */
-    createdAt?: Date;
+    CreatedAt?: Date;
 
     /**
      * @type {Date}
      * @memberof CreateCardDto
      * @example 2024-07-10T06:52:41.152Z
      */
-    updatedAt?: Date;
+    UpdatedAt?: Date;
 }

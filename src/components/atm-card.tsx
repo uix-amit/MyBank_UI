@@ -1,3 +1,5 @@
+import { format } from 'date-fns/format';
+
 import { UpdateCardDto } from '@shared/models';
 import { formatAccountNumber } from '@utils/utils';
 
@@ -17,12 +19,14 @@ function AtmCard({ card }: { card: UpdateCardDto }) {
       </div>
       <div className='mb-4'>
         <div className='text-gray-500 text-sm mb-1'>Card Number</div>
-        <div className='text-gray-800 text-xl'>{formatAccountNumber(card.cardNumber)}</div>
+        <div className='text-gray-800 text-xl'>{formatAccountNumber(card.CardNumber)}</div>
       </div>
       <div className='flex justify-between items-center'>
         <div>
           <div className='text-gray-500 text-sm mb-1'>Expires</div>
-          <div className='text-gray-800 font-bold'>12/24</div>
+          <div className='text-gray-800 font-bold'>
+            {format(new Date(card.ExpirationDate), 'MM/yy')}
+          </div>
         </div>
         <div>
           <div className='text-gray-500 text-sm mb-1'>CVV</div>
