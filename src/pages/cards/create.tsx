@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
@@ -11,10 +11,28 @@ import { useNavigate } from 'react-router-dom';
 function CardCreate() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [bankAccounts, setBankAccounts] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Link new card'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('savings-account')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((response: any) => {
+        const formattedAccountOptions = response.map(
+          ({ AccountID, AccountNumber }: { AccountID: string; AccountNumber: string }) => ({
+            value: AccountID,
+            label: AccountNumber,
+          })
+        );
+        setBankAccounts(formattedAccountOptions);
+      })
+      .catch();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       AccountID: '',
@@ -49,7 +67,7 @@ function CardCreate() {
     },
   });
 
-  const AccountIDs = [{ value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' }];
+  // const AccountIDs = [{ value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' }];
 
   return (
     <>
@@ -71,7 +89,7 @@ function CardCreate() {
             className={`mt-1 block w-full select select-bordered ${formik.touched.AccountID && formik.errors.AccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select an account number</option>
-            {AccountIDs.map((account) => (
+            {bankAccounts.map((account) => (
               <option key={account.value} value={account.value}>
                 {account.label}
               </option>

@@ -13,20 +13,20 @@ function CardItem({
   bankName: string;
 }) {
   return (
-    <div className='shadow-lg rounded-lg bg-white p-4 flex flex-col lg:flex-row gap-4 lg:gap-16 lg:items-center'>
-      <div className='grow'>
+    <div className='shadow-lg rounded-lg bg-white p-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-center'>
+      <div>
         <div className='text-gray-500 text-sm mb-1'>Bank Name</div>
         <div className='text-gray-800'>{bankName}</div>
       </div>
-      <div className='grow'>
+      <div>
         <div className='text-gray-500 text-sm mb-1'>Card Number</div>
         <div className='text-gray-800'>{formatAccountNumber(card.CardNumber)}</div>
       </div>
-      <div className='grow'>
+      <div>
         <div className='text-gray-500 text-sm mb-1'>Card Holder</div>
         <div className='text-gray-800'>{fullName}</div>
       </div>
-      <Link to={'details'} className='text-primary grow'>
+      <Link to={'details'} className='text-primary'>
         View Details
         <img
           className='inline-block w-8 pl-2'
