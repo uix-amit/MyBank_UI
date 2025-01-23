@@ -29,28 +29,31 @@ function Card() {
     <>
       <h2 className='text-xl font-bold mb-4'>Frequently Used</h2>
       <div className='flex flex-col lg:flex-row gap-4 w-full'>
-        {cardlistResponse?.Accounts?.map((account) =>
-          account.Cards.map((card) => (
-            <div key={card.CardID} className='w-full md:1/2 lg:w-1/3 min-w-80'>
-              <AtmCard
-                card={card}
-                fullName={`${cardlistResponse.FirstName} ${cardlistResponse.LastName}`}
-                accountNumber={account.AccountNumber}
-              />
-            </div>
-          ))
-        )}
+        {(() => {
+          let totalCardsRendered = 0;
+          return cardlistResponse?.Accounts?.map((account) =>
+            account.Cards.map((card) => {
+              if (totalCardsRendered >= 3) return null; // Stop rendering if the limit is reached
+
+              totalCardsRendered += 1; // Increment the count of rendered cards
+              return (
+                <div key={card.CardID} className='w-full md:1/2 lg:w-1/3 min-w-80'>
+                  <AtmCard
+                    card={card}
+                    fullName={`${cardlistResponse.FirstName} ${cardlistResponse.LastName}`}
+                    accountNumber={account.AccountNumber}
+                  />
+                </div>
+              );
+            })
+          );
+        })()}
       </div>
       <h2 className='text-xl font-bold my-4'>All Cards</h2>
       <div className='flex flex-col gap-2 w-full'>
         {cardlistResponse?.Accounts?.map((account) =>
           account.Cards.map((card) => (
-            <CardItem
-              key={card.CardID}
-              card={card}
-              fullName={`${cardlistResponse.FirstName} ${cardlistResponse.LastName}`}
-              bankName={account.Bank.BankName}
-            />
+            <CardItem key={card.CardID} card={card} bankName={account.Bank.BankName} />
           ))
         )}
       </div>

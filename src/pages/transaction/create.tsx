@@ -1,27 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
+import { CreateTransactionConfig } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { CreateTransactionConfig } from '@shared/models';
+import axiosInstance from '@utils/axiosInstance';
 
 function TransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
+  const [savingsAccount, setSavingsAccount] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Transfer Money'));
   }, [dispatch]);
 
-  const accountIDs = [
-    { value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' },
-    { value: 'cm5wsluz50001ycfakwn8bwkz', label: '1234512345123451' },
-    { value: 'cm5xsvp1p0009uu2p5fzpp2m4', label: '1234512345123459' },
-  ];
+  useEffect(() => {
+    axiosInstance
+      .get('savings-account')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((response: any) =>
+        setSavingsAccount(
+          response.map(
+            ({ AccountID, AccountNumber }: { AccountID: string; AccountNumber: string }) => ({
+              value: AccountID,
+              label: AccountNumber,
+            })
+          )
+        )
+      )
+      .catch(console.error);
+  }, []);
 
   const config: CreateTransactionConfig = {
-    fromAccountIDs: accountIDs,
-    toAccountIDs: accountIDs,
+    fromAccountIDs: savingsAccount,
+    toAccountIDs: savingsAccount,
     transactionType: 'Transfer',
   };
 

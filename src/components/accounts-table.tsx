@@ -1,5 +1,7 @@
-import { UpdateAccountDto } from '@shared/models';
 import { format } from 'date-fns';
+
+import { UpdateAccountDto } from '@shared/models';
+import { formatAccountNumber } from '@utils/utils';
 
 function AccountsTable({
   accounts,
@@ -28,7 +30,7 @@ function AccountsTable({
                 {account.Bank.BankName}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
-                {account.AccountNumber}
+                {formatAccountNumber(account.AccountNumber)}
               </td>
               <td className={index === accounts.length - 1 ? '' : 'border-b'}>
                 {account.Balance.toFixed(2)}

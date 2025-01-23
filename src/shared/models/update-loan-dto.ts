@@ -26,94 +26,94 @@ export interface UpdateLoanDto {
    * @memberof UpdateLoanDto
    * @example b07c6a3d-a366-487b-b1c6-0c83a842f73a
    */
-  loanID: string;
+  LoanID: string;
 
   /**
    * @type {string}
    * @memberof UpdateLoanDto
    * @example 82cba0c1-00d7-46ca-904a-6558fe953cee
    */
-  userID: string;
+  UserID: string;
 
   /**
    * @type {string}
    * @memberof UpdateLoanDto
    * @example a7c94318-3caf-4dcd-985e-a9f0320abc77
    */
-  bankID: string;
+  BankID: string;
 
   /**
    * @type {string}
    * @memberof UpdateLoanDto
    * @example 1234123412341234
    */
-  accountNumber: string;
+  AccountNumber: string;
 
   /**
    * @type {LoanType}
    * @memberof UpdateLoanDto
    */
-  loanType: LoanType;
+  LoanType: LoanType;
 
   /**
    * @type {number}
    * @memberof UpdateLoanDto
    * @example 3972000
    */
-  loanAmount: number;
+  LoanAmount: number;
 
   /**
    * @type {number}
    * @memberof UpdateLoanDto
    * @example 9.3
    */
-  interestRate: number;
+  InterestRate: number;
 
   /**
    * @type {number}
    * @memberof UpdateLoanDto
    * @example 360
    */
-  loanTerm: number;
+  LoanTerm: number;
 
   /**
    * @type {string}
    * @memberof UpdateLoanDto
    * @example 2024-07-10T06:52:41.154Z
    */
-  loanStartDate: string;
+  LoanStartDate: string;
 
   /**
    * @type {string}
    * @memberof UpdateLoanDto
    * @example 2024-07-10T06:52:41.154Z
    */
-  loanEndDate: string;
+  LoanEndDate: string;
 
   /**
    * @type {number}
    * @memberof UpdateLoanDto
    * @example 360
    */
-  remainingTenure: number;
+  RemainingTenure: number;
 
   /**
    * @type {LoanAccountStatus}
    * @memberof UpdateLoanDto
    */
-  loanStatus: LoanAccountStatus;
+  LoanStatus: LoanAccountStatus;
 
   /**
    * @type {Date}
    * @memberof UpdateLoanDto
    * @example 2024-07-10T06:52:41.154Z
    */
-  createdAt: Date;
+  CreatedAt: Date;
 
   /**
    * @type {Date}
    * @memberof UpdateLoanDto
    * @example 2024-07-10T06:52:41.154Z
    */
-  updatedAt: Date;
+  UpdatedAt: Date;
 }

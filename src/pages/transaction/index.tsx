@@ -1,18 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import TransactionFilters from '@components/transaction-filters';
 import TransactionTable from '@components/transaction-table';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { transactions } from '@assets/stubs/fake-data';
+import axiosInstance from '@utils/axiosInstance';
+import { UpdateTransactionDto } from '@shared/models';
 
 function Transaction() {
   const dispatch = useDispatch<AppDispatch>();
+  const [transactions, setTransactions] = useState<UpdateTransactionDto[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Transaction history'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('transactions')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((response: any) => setTransactions(response))
+      .catch(console.error);
+  }, []);
 
   return (
     <>
