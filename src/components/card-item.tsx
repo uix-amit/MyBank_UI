@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom';
 
-import { UpdateCardDto } from '@shared/models';
 import { formatAccountNumber } from '@utils/utils';
+import { UpdateCardDto } from '@shared/models';
 
-function CardItem({ card }: { card: UpdateCardDto }) {
+function CardItem({
+  card,
+  fullName,
+  bankName,
+}: {
+  card: UpdateCardDto;
+  fullName: string;
+  bankName: string;
+}) {
   return (
     <div className='shadow-lg rounded-lg bg-white p-4 flex flex-col lg:flex-row gap-4 lg:gap-16 lg:items-center'>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Bank Name</div>
-        <div className='text-gray-800'>ICICI Bank</div>
+        <div className='text-gray-800'>{bankName}</div>
       </div>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Card Number</div>
@@ -16,7 +24,7 @@ function CardItem({ card }: { card: UpdateCardDto }) {
       </div>
       <div className='grow'>
         <div className='text-gray-500 text-sm mb-1'>Card Holder</div>
-        <div className='text-gray-800'>Alexander Day</div>
+        <div className='text-gray-800'>{fullName}</div>
       </div>
       <Link to={'details'} className='text-primary grow'>
         View Details
