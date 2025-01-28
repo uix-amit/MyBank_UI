@@ -2,7 +2,11 @@ import { format } from 'date-fns';
 
 import { UpdateLoanDto } from '@shared/models';
 
-function LoansTable({ loanAccounts }: { loanAccounts: UpdateLoanDto[] }) {
+function LoansTable({
+  loanAccounts,
+}: {
+  loanAccounts: Array<UpdateLoanDto & { Bank: { BankName: string } }>;
+}) {
   return (
     <div className='overflow-x-auto shadow rounded-lg'>
       <table className='table w-full'>
@@ -20,35 +24,35 @@ function LoansTable({ loanAccounts }: { loanAccounts: UpdateLoanDto[] }) {
         </thead>
         <tbody>
           {loanAccounts.map((account, index) => (
-            <tr key={account.loanID} className='hover:bg-gray-200 bg-white'>
+            <tr key={account.LoanID} className='hover:bg-gray-200 bg-white'>
               <td className={index === loanAccounts.length - 1 ? 'rounded-b-lg' : 'border-b'}>
-                {account.bankID}
+                {account.Bank.BankName}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {account.accountNumber}
+                {account.AccountNumber}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {account.loanAmount.toFixed(2)}
+                {account.LoanAmount.toFixed(2)}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {account.loanType}
+                {account.LoanType}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {account.interestRate}
+                {account.InterestRate}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {account.remainingTenure}
+                {account.RemainingTenure}
               </td>
               <td className={index === loanAccounts.length - 1 ? '' : 'border-b'}>
-                {format(account.createdAt, 'dd/MM/yyyy HH:mm:ss')}
+                {format(account.CreatedAt, 'dd/MM/yyyy HH:mm:ss')}
               </td>
               <td className={index === loanAccounts.length - 1 ? 'rounded-br-lg' : 'border-b'}>
                 <span
                   className={`badge ${
-                    account.loanStatus === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'
+                    account.LoanStatus === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'
                   }`}
                 >
-                  {account.loanStatus}
+                  {account.LoanStatus}
                 </span>
               </td>
             </tr>
