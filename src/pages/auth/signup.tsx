@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { baseUrl } from '@utils/constants';
+import { BASE_URL } from '@utils/constants';
 
 function Signup() {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ function Signup() {
       console.log('ConfirmPassword: ', ConfirmPassword);
 
       axios
-        .post(`${baseUrl}/users`, {
+        .post(`${BASE_URL}/users`, {
           ...payload,
           DateOfBirth: new Date(values.DateOfBirth).toISOString(),
         })

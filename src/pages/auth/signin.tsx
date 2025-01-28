@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { baseUrl } from '@utils/constants';
+import { BASE_URL } from '@utils/constants';
 
 function Signin() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Signin() {
     onSubmit: (values) => {
       console.log('Form data', values);
       axios
-        .post(`${baseUrl}/auth/login`, values)
+        .post(`${BASE_URL}/auth/login`, values)
         .then(({ data }) => {
           if (data.id) {
             navigate(`/auth/2fa?id=${data.id}`);

@@ -1,20 +1,31 @@
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import { Bank } from '@shared/models/banks-dto';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
+import { LOAN_TYPES } from '@utils/constants';
 
 function LoanAccountCreate() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [banks, setBanks] = useState<Bank[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Avail Loan'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/savings-account/banks')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((data: any) => setBanks(data))
+      .catch(console.error);
+  }, []);
 
   const handleReset = () => {
     formik.resetForm();
@@ -68,27 +79,6 @@ function LoanAccountCreate() {
     },
   });
 
-  const banks = [
-    { value: 'cm5ws2j1s00040cjrb7aye7zq', label: 'State Bank of India' },
-    { value: 'cm5ws2y3f00050cjr77q0d8fg', label: 'HDFC Bank' },
-    { value: 'cm5ws36d300070cjrbavq6sln', label: 'ICICI Bank' },
-    { value: 'cm5ws3tqh00080cjr3ljq6pyp', label: 'Axis Bank' },
-    { value: 'cm5ws47ny000a0cjrdz99ex7y', label: 'Bank of Baroda' },
-    { value: 'cm5ws4ge9000b0cjr0wnj8wun', label: 'Kotak Mahindra Bank' },
-    { value: 'cm5ws4nu6000c0cjrgat51n67', label: 'Yes Bank' },
-    { value: 'cm5ws4siw000d0cjr2drmhuay', label: 'Bank of India' },
-    { value: 'cm5ws4yp2000f0cjrau4z59qt', label: 'Federal Bank' },
-    { value: 'cm5ws5f30000g0cjr6npx19bs', label: 'Punjab National Bank' },
-  ];
-
-  const LoanTypes = [
-    { value: 'HOME', label: 'HOME' },
-    { value: 'VEHICLE', label: 'VEHICLE' },
-    { value: 'GOLD', label: 'GOLD' },
-    { value: 'MORTGAGE', label: 'MORTGAGE' },
-    { value: 'PERSONAL', label: 'PERSONAL' },
-    { value: 'EDUCATIONAL', label: 'EDUCATIONAL' },
-  ];
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Transfer money to other accounts</h2>
@@ -110,8 +100,8 @@ function LoanAccountCreate() {
           >
             <option value=''>Select a bank</option>
             {banks.map((bank) => (
-              <option key={bank.value} value={bank.value}>
-                {bank.label}
+              <option key={bank.BankID} value={bank.BankID}>
+                {bank.BankName}
               </option>
             ))}
           </select>
@@ -151,7 +141,7 @@ function LoanAccountCreate() {
             className={`mt-1 block w-full select select-bordered ${formik.touched.LoanType && formik.errors.LoanType ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a loan type</option>
-            {LoanTypes.map((type) => (
+            {LOAN_TYPES.map((type) => (
               <option key={type.value} value={type.value}>
                 {type.label}
               </option>

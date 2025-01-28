@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { baseUrl } from './constants';
+import { BASE_URL } from './constants';
 
 const axiosInstance = axios.create({
-  baseURL: baseUrl,
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { baseUrl } from '@utils/constants';
+import { BASE_URL } from '@utils/constants';
 
 function Otp() {
   const formik = useFormik({
@@ -18,7 +18,7 @@ function Otp() {
     onSubmit: (values) => {
       console.log('OTP submitted:', values);
       axios
-        .post(`${baseUrl}/auth/otp`, { otp: +values.otp, id: params.get('id') })
+        .post(`${BASE_URL}/auth/otp`, { otp: +values.otp, id: params.get('id') })
         .then(({ data }) => {
           sessionStorage.setItem('jwt', data.access_token);
           navigate('/');

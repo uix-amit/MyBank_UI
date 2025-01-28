@@ -1,20 +1,31 @@
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import { Bank } from '@shared/models/banks-dto';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
+import { CURRENCIES, STATUSES } from '@utils/constants';
 
 function BankAccountCreate() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [banks, setBanks] = useState<Bank[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('link savings account'));
   }, [dispatch]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/savings-account/banks')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((data: any) => setBanks(data))
+      .catch(console.error);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -54,35 +65,6 @@ function BankAccountCreate() {
     },
   });
 
-  const banks = [
-    { value: 'cm5ws2j1s00040cjrb7aye7zq', label: 'State Bank of India' },
-    { value: 'cm5ws2y3f00050cjr77q0d8fg', label: 'HDFC Bank' },
-    { value: 'cm5ws36d300070cjrbavq6sln', label: 'ICICI Bank' },
-    { value: 'cm5ws3tqh00080cjr3ljq6pyp', label: 'Axis Bank' },
-    { value: 'cm5ws47ny000a0cjrdz99ex7y', label: 'Bank of Baroda' },
-    { value: 'cm5ws4ge9000b0cjr0wnj8wun', label: 'Kotak Mahindra Bank' },
-    { value: 'cm5ws4nu6000c0cjrgat51n67', label: 'Yes Bank' },
-    { value: 'cm5ws4siw000d0cjr2drmhuay', label: 'Bank of India' },
-    { value: 'cm5ws4yp2000f0cjrau4z59qt', label: 'Federal Bank' },
-    { value: 'cm5ws5f30000g0cjr6npx19bs', label: 'Punjab National Bank' },
-  ];
-
-  const currencies = [
-    { value: 'INR', label: 'INR' },
-    { value: 'GBP', label: 'GBP' },
-    { value: 'USD', label: 'USD' },
-    { value: 'AUD', label: 'AUD' },
-    { value: 'JPY', label: 'JPY' },
-    { value: 'EUR', label: 'EUR' },
-  ];
-
-  const Statuses = [
-    { value: 'ACTIVE', label: 'ACTIVE' },
-    { value: 'INACTIVE', label: 'INACTIVE' },
-    { value: 'DORMANT', label: 'DORMANT' },
-    { value: 'CLOSED', label: 'CLOSED' },
-  ];
-
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Link my bank account</h2>
@@ -104,8 +86,8 @@ function BankAccountCreate() {
           >
             <option value=''>Select a bank</option>
             {banks.map((bank) => (
-              <option key={bank.value} value={bank.value}>
-                {bank.label}
+              <option key={bank.BankID} value={bank.BankID}>
+                {bank.BankName}
               </option>
             ))}
           </select>
@@ -163,9 +145,9 @@ function BankAccountCreate() {
             className={`select select-bordered mt-1 block w-full border ${formik.touched.Currency && formik.errors.Currency ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a Currency</option>
-            {currencies.map((Currency) => (
-              <option key={Currency.value} value={Currency.value}>
-                {Currency.label}
+            {CURRENCIES.map((currency) => (
+              <option key={currency.value} value={currency.value}>
+                {currency.label}
               </option>
             ))}
           </select>
@@ -187,9 +169,9 @@ function BankAccountCreate() {
             className={`select select-bordered mt-1 block w-full border ${formik.touched.Status && formik.errors.Status ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select a Status</option>
-            {Statuses.map((Status) => (
-              <option key={Status.value} value={Status.value}>
-                {Status.label}
+            {STATUSES.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
               </option>
             ))}
           </select>
