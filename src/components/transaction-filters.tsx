@@ -9,7 +9,6 @@ function TransactionFilters({
   isLoanFilter: boolean;
   onFilter: (data: FilterTransaction) => void;
 }) {
-  // Define initial values for the form
   const initialValues = {
     TransactionType: '',
     StartDate: null,
@@ -18,7 +17,6 @@ function TransactionFilters({
     MaxAmount: '',
   };
 
-  // Define validation schema using Yup
   const validationSchema = Yup.object({
     TransactionType: Yup.string(),
     StartDate: Yup.date()
@@ -37,7 +35,7 @@ function TransactionFilters({
       .positive('Max amount must be a positive number')
       .nullable()
       .when('MinAmount', (MinAmount, schema) => {
-        return MinAmount
+        return MinAmount[0]
           ? schema.moreThan(Yup.ref('MinAmount'), 'Max amount must be greater than min amount')
           : schema;
       }),
@@ -46,22 +44,18 @@ function TransactionFilters({
     return !!TransactionType || !!StartDate || !!EndDate || !!MinAmount || !!MaxAmount;
   });
 
-  // Define onSubmit function
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (values: any) => {
     console.log('Form data', values);
     onFilter(values);
-    // Handle form submission
   };
 
-  // Initialize Formik
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   });
 
-  // Check if at least one field is filled out to enable the filter button
   const isFormValid =
     !!formik.values.TransactionType ||
     !!formik.values.StartDate ||
@@ -109,7 +103,7 @@ function TransactionFilters({
             value={formik.values.StartDate || ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            max={new Date().toISOString().split('T')[0]} // Restrict to today or earlier
+            max={new Date().toISOString().split('T')[0]}
           />
           {formik.touched.StartDate && formik.errors.StartDate ? (
             <div className='text-red-500'>{formik.errors.StartDate}</div>
@@ -121,7 +115,7 @@ function TransactionFilters({
             value={formik.values.EndDate || ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            max={new Date().toISOString().split('T')[0]} // Restrict to today or earlier
+            max={new Date().toISOString().split('T')[0]}
           />
           {formik.touched.EndDate && formik.errors.EndDate ? (
             <div className='text-red-500'>{formik.errors.EndDate}</div>
@@ -134,7 +128,7 @@ function TransactionFilters({
             value={formik.values.MinAmount}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            step='0.01' // Allow float values
+            step='0.01'
           />
           {formik.touched.MinAmount && formik.errors.MinAmount ? (
             <div className='text-red-500'>{formik.errors.MinAmount}</div>
@@ -147,7 +141,7 @@ function TransactionFilters({
             value={formik.values.MaxAmount}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            step='0.01' // Allow float values
+            step='0.01'
           />
           {formik.touched.MaxAmount && formik.errors.MaxAmount ? (
             <div className='text-red-500'>{formik.errors.MaxAmount}</div>
