@@ -33,7 +33,9 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
           Amount: parseFloat(values.Amount),
         })
       );
-      navigate('/transaction/payment');
+      navigate(
+        config.transactionType === 'Transfer' ? '/transaction/payment' : '/loan-transaction/payment'
+      );
     },
   });
 
@@ -59,9 +61,9 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
           className={`mt-1 block w-full select select-bordered ${formik.touched.FromAccountID && formik.errors.FromAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         >
           <option value=''>Select a from account</option>
-          {config.fromAccountIDs.map((account) => (
-            <option key={account.value} value={account.value}>
-              {account.label}
+          {config.fromAccount.map((account) => (
+            <option key={account.AccountID} value={account.AccountID}>
+              {account.AccountNumber}
             </option>
           ))}
         </select>
@@ -83,9 +85,9 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
           className={`mt-1 block w-full select select-bordered ${formik.touched.ToAccountID && formik.errors.ToAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         >
           <option value=''>Select a to account</option>
-          {config.toAccountIDs.map((account) => (
-            <option key={account.value} value={account.value}>
-              {account.label}
+          {config.toAccount.map((account) => (
+            <option key={account.LoanID} value={account.LoanID}>
+              {account.AccountNumber}
             </option>
           ))}
         </select>

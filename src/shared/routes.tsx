@@ -107,6 +107,10 @@ const router = createBrowserRouter([
             path: 'create',
             element: <LoanTransactionCreate />,
           },
+          {
+            path: 'payment',
+            element: <Payment />,
+          },
         ],
       },
       {

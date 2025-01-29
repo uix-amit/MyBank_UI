@@ -1,11 +1,7 @@
+import { UpdateAccountDto, UpdateLoanDto } from '.';
+
 export interface CreateTransactionConfig {
-  fromAccountIDs: {
-    value: string;
-    label: string;
-  }[];
-  toAccountIDs: {
-    value: string;
-    label: string;
-  }[];
+  fromAccount: UpdateAccountDto[];
+  toAccount: UpdateLoanDto[];
   transactionType: 'Transfer' | 'LoanRepayment';
 }

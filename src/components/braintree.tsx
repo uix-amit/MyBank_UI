@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import axiosInstance from '@utils/axiosInstance';
 import { getTransaction } from '@shared/store/transaction.slice';
 
-function Braintree() {
+function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRepayment' }) {
   const [braintreeInstance, setBraintreeInstance] = useState<Dropin | null>(null);
   const [clientToken, setClientToken] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -72,8 +72,10 @@ function Braintree() {
         const nonce = payload.nonce;
 
         axiosInstance
-          .post('/braintree/checkout', { paymentMethodNonce: nonce, transaction })
-          .then(() => navigate('/transaction'))
+          .post('/braintree/checkout', { nonce, transaction, transactionType })
+          .then(() =>
+            navigate(transactionType === 'Transfer' ? '/transaction' : '/loan-transaction')
+          )
           .catch(console.error);
       } catch (err) {
         setError('Payment processing failed');

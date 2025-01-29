@@ -1,32 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
-import { CreateTransactionConfig } from '@shared/models';
+import { CreateTransactionConfig, UpdateAccountDto, UpdateLoanDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import axiosInstance from '@utils/axiosInstance';
 
 function LoanTransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
+  const [fromAccount, setFromAccount] = useState<UpdateAccountDto[]>([]);
+  const [toAccount, setToAccount] = useState<UpdateLoanDto[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Loan Repayment'));
   }, [dispatch]);
 
-  const fromAccountIDs = [
-    { value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' },
-    { value: 'cm5wsluz50001ycfakwn8bwkz', label: '1234512345123451' },
-    { value: 'cm5xsvp1p0009uu2p5fzpp2m4', label: '1234512345123459' },
-  ];
-
-  const toAccountIDs = [
-    { value: 'cm5y3g2je0005y84n8duiuytt', label: '1234567890123456' },
-    { value: 'cm5zfxi200003k09sb679fw9w', label: '1234512345123454' },
-  ];
+  useEffect(() => {
+    Promise.all([axiosInstance.get('/savings-account'), axiosInstance.get('/loans')])
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then(([fromAccountData, toAccountData]: any) => {
+        setFromAccount(fromAccountData);
+        setToAccount(toAccountData);
+      })
+      .catch(console.error);
+  }, []);
 
   const config: CreateTransactionConfig = {
-    fromAccountIDs,
-    toAccountIDs,
+    fromAccount,
+    toAccount,
     transactionType: 'LoanRepayment',
   };
 
