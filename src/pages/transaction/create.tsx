@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
-import { CreateTransactionConfig } from '@shared/models';
+import { CreateTransactionConfig, UpdateAccountDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
 
 function TransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
-  const [savingsAccount, setSavingsAccount] = useState<{ value: string; label: string }[]>([]);
+  const [savingsAccount, setSavingsAccount] = useState<UpdateAccountDto[]>([]);
 
   useEffect(() => {
     dispatch(setTitle('Transfer Money'));
@@ -19,22 +19,13 @@ function TransactionCreate() {
     axiosInstance
       .get('savings-account')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((response: any) =>
-        setSavingsAccount(
-          response.map(
-            ({ AccountID, AccountNumber }: { AccountID: string; AccountNumber: string }) => ({
-              value: AccountID,
-              label: AccountNumber,
-            })
-          )
-        )
-      )
+      .then((response: any) => setSavingsAccount(response))
       .catch(console.error);
   }, []);
 
   const config: CreateTransactionConfig = {
-    fromAccountIDs: savingsAccount,
-    toAccountIDs: savingsAccount,
+    fromAccount: savingsAccount,
+    toAccount: savingsAccount,
     transactionType: 'Transfer',
   };
 

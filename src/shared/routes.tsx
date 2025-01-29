@@ -14,6 +14,7 @@ import LoanAccountCreate from '@loanAccounts/create';
 import LoanAccount from '@loanAccounts/index';
 import LoanTransactionCreate from '@loanTransaction/create';
 import LoanTransaction from '@loanTransaction/index';
+import LoanRepayment from '@loanTransaction/payment';
 import Notifications from '@notifications/index';
 import TransactionCreate from '@transaction/create';
 import Transaction from '@transaction/index';
@@ -109,7 +110,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'payment',
-            element: <Payment />,
+            element: <LoanRepayment />,
           },
         ],
       },

@@ -37,11 +37,10 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
         config.transactionType === 'Transfer' ? '/transaction/payment' : '/loan-transaction/payment'
       );
     },
+    onReset: () => {
+      formik.resetForm();
+    },
   });
-
-  const handleReset = () => {
-    formik.resetForm();
-  };
 
   return (
     <form
@@ -85,11 +84,14 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
           className={`mt-1 block w-full select select-bordered ${formik.touched.ToAccountID && formik.errors.ToAccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
         >
           <option value=''>Select a to account</option>
-          {config.toAccount.map((account) => (
-            <option key={account.LoanID} value={account.LoanID}>
-              {account.AccountNumber}
-            </option>
-          ))}
+          {config.toAccount.map((account) => {
+            const accountId = 'LoanID' in account ? account.LoanID : account.AccountID;
+            return (
+              <option key={accountId} value={accountId}>
+                {account.AccountNumber}
+              </option>
+            );
+          })}
         </select>
         {formik.touched.ToAccountID && formik.errors.ToAccountID ? (
           <div className='text-red-500 text-sm'>{formik.errors.ToAccountID}</div>
@@ -115,7 +117,7 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
       </div>
 
       <div className='flex flex-col-reverse lg:flex-row gap-4'>
-        <button type='reset' onClick={handleReset} className='btn btn-secondary grow'>
+        <button type='reset' className='btn btn-secondary grow'>
           Cancel
         </button>
         <button
