@@ -30,7 +30,7 @@ function LoanTransaction() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filterParams = new URLSearchParams(filters as any).toString();
     axiosInstance
-      .get(`/transactions/filter?${filterParams}`)
+      .get(`/loan-transactions/filter?${filterParams}`)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((response: any) => setLoanTransactions(response))
       .catch(console.error);
