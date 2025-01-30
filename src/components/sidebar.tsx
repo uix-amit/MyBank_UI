@@ -69,10 +69,6 @@ function Sidebar({ template }: { template: ReactNode }) {
           <li className='px-4'>
             <Link to='user-account/change-password'>Change Password</Link>
           </li>
-          <li className='opacity-70 text-lg font-semibold text-primary pl-4'>Notifications</li>
-          <li className='px-4'>
-            <Link to='notifications'>View notifications</Link>
-          </li>
         </ul>
       </div>
     </div>

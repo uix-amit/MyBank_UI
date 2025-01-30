@@ -25,33 +25,33 @@ export interface UpdateNotificationDto {
      * @memberof UpdateNotificationDto
      * @example 6955b3b0-a3ea-4743-810a-adcaa9d8e527
      */
-    notificationID: string;
+    NotificationID: string;
 
     /**
      * @type {string}
      * @memberof UpdateNotificationDto
      * @example 98ef3ec0-9f87-442e-8859-50150b8b485c
      */
-    userID: string;
+    UserID: string;
 
     /**
      * @type {string}
      * @memberof UpdateNotificationDto
      * @example Dear John, your salary of 50,000$ has been credited to your account on 01/03/2023.
      */
-    message?: string;
+    Message?: string;
 
     /**
      * @type {boolean}
      * @memberof UpdateNotificationDto
      * @example false
      */
-    isRead?: boolean;
+    IsRead?: boolean;
 
     /**
      * @type {Date}
      * @memberof UpdateNotificationDto
      * @example 2024-07-10T06:52:41.155Z
      */
-    createdAt?: Date;
+    CreatedAt?: Date;
 }
