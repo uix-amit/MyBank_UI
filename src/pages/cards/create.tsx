@@ -19,7 +19,7 @@ function CardCreate() {
 
   useEffect(() => {
     axiosInstance
-      .get('savings-account')
+      .get('/savings-account')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((response: any) => {
         const formattedAccountOptions = response.map(

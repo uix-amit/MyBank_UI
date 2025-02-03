@@ -46,7 +46,7 @@ function Notifications() {
 
   const markAllAsRead = () => {
     axiosInstance
-      .patch('/notifications/toggle-read`', {
+      .patch('/notifications/toggle-read', {
         notificationIds: notifications.map(({ NotificationID }) => NotificationID),
         IsRead: !isAllRead,
       })

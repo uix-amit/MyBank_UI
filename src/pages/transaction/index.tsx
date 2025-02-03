@@ -19,7 +19,7 @@ function Transaction() {
 
   useEffect(() => {
     axiosInstance
-      .get('transactions')
+      .get('/transactions')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((response: any) => setTransactions(response))
       .catch(console.error);

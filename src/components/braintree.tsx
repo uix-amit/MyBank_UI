@@ -19,7 +19,7 @@ function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRep
   useEffect(() => {
     const fetchClientToken = async () => {
       await axiosInstance
-        .get('braintree/client-token')
+        .get('/braintree/client-token')
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .then((clientToken: any) => {
           setClientToken(clientToken);

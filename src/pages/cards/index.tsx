@@ -19,7 +19,7 @@ function Card() {
 
   useEffect(() => {
     axiosInstance
-      .get('cards')
+      .get('/cards')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((response: any) => setCardListResponse(response))
       .catch(console.error);

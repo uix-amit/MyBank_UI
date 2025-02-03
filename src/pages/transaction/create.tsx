@@ -17,7 +17,7 @@ function TransactionCreate() {
 
   useEffect(() => {
     axiosInstance
-      .get('savings-account')
+      .get('/savings-account')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((response: any) => setSavingsAccount(response))
       .catch(console.error);

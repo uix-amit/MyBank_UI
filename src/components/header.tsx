@@ -1,10 +1,21 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { RootState } from '@shared/store/rootStore';
+import { getTitle } from '@shared/store/header.slice';
+import axiosInstance from '@utils/axiosInstance';
 
 function Header() {
-  const title: string = useSelector((state: RootState) => state.header.title);
+  const title: string = useSelector(getTitle);
+  const [hasUnreadNotification, setHasUnreadNotification] = useState<boolean>(false);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/notifications?IsRead=false')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((data: any) => setHasUnreadNotification(data.length > 0))
+      .catch(console.error);
+  }, []);
 
   return (
     <header className='shadow sticky top-0 z-20 flex'>
@@ -29,7 +40,11 @@ function Header() {
                 src='https://img.icons8.com/?size=100&id=11642&format=png&color=000000'
                 alt='Notifications'
               />
-              <span className='badge badge-xs badge-primary indicator-item animate-pulse'></span>
+              {hasUnreadNotification ? (
+                <span className='badge badge-xs badge-primary indicator-item animate-pulse'></span>
+              ) : (
+                ''
+              )}
             </div>
           </Link>
           <div className='dropdown dropdown-end'>
