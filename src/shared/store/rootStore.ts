@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import counterReducer from '../../counter.slice';
+import accountPreferencesSlice from './accountPreferences.slice';
 import banksSlice from './banks.slice';
 import cardsSlice from './cards.slice';
 import headerSlice from './header.slice';
@@ -13,16 +14,17 @@ import usersSlice from './users.slice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
-    header: headerSlice,
-    transaction: transactionSlice,
+    accountPreferences: accountPreferencesSlice,
     banks: banksSlice,
     cards: cardsSlice,
+    counter: counterReducer,
+    header: headerSlice,
     loanAccounts: loanAccountsSlice,
     loanTransactions: loanTransactionsSlice,
     notifications: notificationsSlice,
-    savingsAccount: savingsAccountsSlice,
-    user: usersSlice,
+    savingsAccounts: savingsAccountsSlice,
+    transactions: transactionSlice,
+    users: usersSlice,
   },
 });
 

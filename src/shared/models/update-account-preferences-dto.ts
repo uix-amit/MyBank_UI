@@ -25,54 +25,54 @@ export interface UpdateAccountPreferencesDto {
      * @memberof UpdateAccountPreferencesDto
      * @example 5b836fb0-7da3-4404-a64f-9f195a6171e1
      */
-    accountPreferenceID: string;
+    AccountPreferenceID: string;
 
     /**
      * @type {string}
      * @memberof UpdateAccountPreferencesDto
      * @example c7ac2c51-7768-442d-83fe-c9bac1257013
      */
-    userID: string;
+    UserID: string;
 
     /**
      * @type {boolean}
      * @memberof UpdateAccountPreferencesDto
      * @example true
      */
-    emailNotifications?: boolean;
+    EmailNotifications?: boolean;
 
     /**
      * @type {boolean}
      * @memberof UpdateAccountPreferencesDto
      * @example true
      */
-    sMSNotifications?: boolean;
+    SMSNotifications?: boolean;
 
     /**
      * @type {boolean}
      * @memberof UpdateAccountPreferencesDto
      * @example true
      */
-    pushNotifications?: boolean;
+    PushNotifications?: boolean;
 
     /**
      * @type {boolean}
      * @memberof UpdateAccountPreferencesDto
      * @example true
      */
-    enableTwoFactorAuth?: boolean;
+    EnableTwoFactorAuth?: boolean;
 
     /**
      * @type {Date}
      * @memberof UpdateAccountPreferencesDto
      * @example 2024-07-10T06:52:41.025Z
      */
-    createdAt?: Date;
+    CreatedAt?: Date;
 
     /**
      * @type {Date}
      * @memberof UpdateAccountPreferencesDto
      * @example 2024-07-10T06:52:41.025Z
      */
-    updatedAt?: Date;
+    UpdatedAt?: Date;
 }

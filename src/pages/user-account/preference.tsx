@@ -1,34 +1,36 @@
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import useAccountPreferences from '@shared/hooks/useAccountPreferences';
+import { getAccountPreferences } from '@shared/store/accountPreferences.slice';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
 
 function Preference() {
-  const [accountPreferenceID, setAccountPreferenceID] = useState(null);
+  useAccountPreferences();
+  const accountPreferences = useSelector(getAccountPreferences);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const formik = useFormik({
     initialValues: {
-      EnableTwoFactorAuth: false,
-      SMSNotifications: false,
-      EmailNotifications: false,
+      EnableTwoFactorAuth: accountPreferences.EnableTwoFactorAuth,
+      SMSNotifications: accountPreferences.SMSNotifications,
+      EmailNotifications: accountPreferences.EmailNotifications,
     },
     validationSchema: Yup.object({
       EnableTwoFactorAuth: Yup.boolean().notRequired(),
       SMSNotifications: Yup.boolean().notRequired(),
       EmailNotifications: Yup.boolean().notRequired(),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values) =>
       axiosInstance
-        .patch(`account-preferences/${accountPreferenceID}`, values)
+        .patch(`account-preferences/${accountPreferences.AccountPreferenceID}`, values)
         .then(() => navigate('/'))
-        .catch(console.error);
-    },
+        .catch(console.error),
     onReset: () => {
       formik.resetForm();
     },
@@ -44,15 +46,12 @@ function Preference() {
   }, [dispatch]);
 
   useEffect(() => {
-    axiosInstance
-      .get('/account-preferences')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((preferences: any) => {
-        setAccountPreferenceID(preferences.AccountPreferenceID);
-        formik.setValues(preferences);
-      })
-      .catch(console.error);
-  }, []);
+    formik.setValues({
+      EnableTwoFactorAuth: accountPreferences.EnableTwoFactorAuth,
+      SMSNotifications: accountPreferences.SMSNotifications,
+      EmailNotifications: accountPreferences.EmailNotifications,
+    });
+  }, [accountPreferences]);
 
   return (
     <>
