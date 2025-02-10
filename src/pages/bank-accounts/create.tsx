@@ -1,10 +1,11 @@
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { Bank } from '@shared/models/banks-dto';
+import useBanks from '@shared/hooks/useBanks';
+import { getBanks } from '@shared/store/banks.slice';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
@@ -13,19 +14,12 @@ import { CURRENCIES, STATUSES } from '@utils/constants';
 function BankAccountCreate() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [banks, setBanks] = useState<Bank[]>([]);
+  const banks = useSelector(getBanks);
+  useBanks();
 
   useEffect(() => {
     dispatch(setTitle('link savings account'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/savings-account/banks')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => setBanks(data))
-      .catch(console.error);
-  }, []);
 
   const formik = useFormik({
     initialValues: {
