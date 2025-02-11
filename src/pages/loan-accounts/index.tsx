@@ -1,31 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import LoanStats from '@components/loan-stats';
 import LoansTable from '@components/loans-table';
-import { UpdateLoanDto } from '@shared/models';
+import useLoans from '@shared/hooks/useLoans';
 import { setTitle } from '@shared/store/header.slice';
+import { getAllLoanAccounts } from '@shared/store/loanAccounts.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 
 function LoanAccount() {
   const dispatch = useDispatch<AppDispatch>();
-  const [loanAccounts, setLoanAccounts] = useState<
-    Array<UpdateLoanDto & { Bank: { BankName: string } }>
-  >([]);
+  const loanAccounts = useSelector(getAllLoanAccounts);
+  useLoans();
 
   useEffect(() => {
     dispatch(setTitle('Loan Accounts'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/loans')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => setLoanAccounts(data))
-      .catch(console.error);
-  }, []);
 
   return (
     <>
