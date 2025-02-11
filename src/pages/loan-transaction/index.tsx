@@ -1,39 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import TransactionFilters from '@components/transaction-filters';
 import TransactionTable from '@components/transaction-table';
-import { setTitle } from '@shared/store/header.slice';
-import { AppDispatch } from '@shared/store/rootStore';
-import { Link } from 'react-router-dom';
-import axiosInstance from '@utils/axiosInstance';
-import { UpdateLoanTransactionDto } from '@shared/models';
+import useLoanTransactions from '@shared/hooks/useLoanTransactions';
 import { FilterTransaction } from '@shared/models/filter-transaction-dto';
+import { setTitle } from '@shared/store/header.slice';
+import { getLoanTransactions } from '@shared/store/loanTransactions.slice';
+import { AppDispatch } from '@shared/store/rootStore';
 
 function LoanTransaction() {
   const dispatch = useDispatch<AppDispatch>();
-  const [loanTransactions, setLoanTransactions] = useState<UpdateLoanTransactionDto[]>([]);
+  const loanTransactions = useSelector(getLoanTransactions);
+  const [url, setUrl] = useState('/loan-transactions');
+  useLoanTransactions({ url });
 
   useEffect(() => {
     dispatch(setTitle('loan transaction history'));
   }, [dispatch]);
 
-  useEffect(() => {
-    axiosInstance
-      .get('/loan-transactions')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => setLoanTransactions(data))
-      .catch(console.error);
-  }, []);
-
   const handleFilterTransactions = (filters: FilterTransaction) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filterParams = new URLSearchParams(filters as any).toString();
-    axiosInstance
-      .get(`/loan-transactions/filter?${filterParams}`)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((response: any) => setLoanTransactions(response))
-      .catch(console.error);
+    setUrl(`/loan-transactions/filter?${filterParams}`);
   };
 
   return (

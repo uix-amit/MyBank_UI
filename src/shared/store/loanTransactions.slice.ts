@@ -1,30 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { UpdateLoanTransactionDto } from '@shared/models';
+
 const initialState: {
-  FromAccountID: string;
-  ToAccountID: string;
-  Amount: number;
+  transactions: UpdateLoanTransactionDto[];
+  activeTransaction: {
+    FromAccountID: string;
+    ToAccountID: string;
+    Amount: number;
+  };
 } = {
-  FromAccountID: '',
-  ToAccountID: '',
-  Amount: 0,
+  transactions: [],
+  activeTransaction: {
+    FromAccountID: '',
+    ToAccountID: '',
+    Amount: 0,
+  },
 };
 
-const loanTransactionSlice = createSlice({
-  name: 'loanTransaction',
+const loanTransactionsSlice = createSlice({
+  name: 'loanTransactions',
   initialState,
   reducers: {
+    loadLoanTransactions: (state, action) => ({ ...state, transactions: action.payload }),
     createLoanTransaction: (state, action) => ({
       ...state,
-      ...action.payload
-    })
+      activeTransaction: action.payload,
+    }),
+    addTransaction: (state, action) => ({
+      ...state,
+      transactions: [...state.transactions, ...action.payload],
+    }),
   },
   selectors: {
-    getLoanTransaction: (state) => state
-  }
+    getActiveLoanTransaction: (state) => state.activeTransaction,
+    getLoanTransactions: (state) => state.transactions,
+  },
 });
 
-export const { createLoanTransaction } = loanTransactionSlice.actions;
-export const { getLoanTransaction } = loanTransactionSlice.selectors;
+export const { loadLoanTransactions, createLoanTransaction } = loanTransactionsSlice.actions;
+export const { getLoanTransactions, getActiveLoanTransaction } = loanTransactionsSlice.selectors;
 
-export default loanTransactionSlice.reducer;
+export default loanTransactionsSlice.reducer;
