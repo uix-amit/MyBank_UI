@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import counterReducer from '../../counter.slice';
 import accountPreferencesSlice from './accountPreferences.slice';
 import banksSlice from './banks.slice';
 import cardsSlice from './cards.slice';
@@ -17,7 +16,6 @@ export const store = configureStore({
     accountPreferences: accountPreferencesSlice,
     banks: banksSlice,
     cards: cardsSlice,
-    counter: counterReducer,
     header: headerSlice,
     loanAccounts: loanAccountsSlice,
     loanTransactions: loanTransactionsSlice,

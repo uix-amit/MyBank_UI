@@ -1,29 +1,23 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import AtmCard from '@components/atm-card';
 import CardItem from '@components/card-item';
 import { CardList } from '@shared/models/card-list.dto';
+import { getCards } from '@shared/store/cards.slice';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
+import useCards from '@shared/hooks/useCards';
 
 function Card() {
   const dispatch = useDispatch<AppDispatch>();
-  const [cardlistResponse, setCardListResponse] = useState<CardList>();
+  const cardlistResponse: CardList = useSelector(getCards);
+  useCards();
 
   useEffect(() => {
     dispatch(setTitle('Cards'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/cards')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((response: any) => setCardListResponse(response))
-      .catch(console.error);
-  }, []);
 
   return (
     <>

@@ -1,14 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CardList } from '@shared/models/card-list.dto';
 
-const initialState: CardList[] = [];
+const initialState: CardList = {
+  Accounts: [],
+  FirstName: '',
+  LastName: '',
+};
 
 const cardSlice = createSlice({
   name: 'cards',
   initialState,
   reducers: {
-    loadCards: (_, action) => action.payload,
-    addCard: (state, action) => [...state, action.payload],
+    loadCards: (state, action) => ({ ...state, ...action.payload }),
+    addCard: (state, action) => ({ ...state, Accounts: [...state.Accounts, action.payload] }),
   },
   selectors: {
     getCards: (state) => state,

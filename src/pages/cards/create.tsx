@@ -67,8 +67,6 @@ function CardCreate() {
     },
   });
 
-  // const AccountIDs = [{ value: 'cm5wsd9yr0003p4jqn8l8da5y', label: '1234512345123455' }];
-
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Link my new card</h2>
