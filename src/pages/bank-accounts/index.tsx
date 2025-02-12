@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import AccountsTable from '@components/accounts-table';
 import Stats from '@components/stats';
+import useSavingsAccount from '@shared/hooks/useSavingsAccount';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
+import { getAllSavingsAccounts } from '@shared/store/savingsAccounts.slice';
 
 function BankAccount() {
-  const [accounts, setAccounts] = useState([]);
+  const accounts = useSelector(getAllSavingsAccounts);
   const dispatch = useDispatch<AppDispatch>();
+  useSavingsAccount();
 
   useEffect(() => {
     dispatch(setTitle('savings account'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/savings-account')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => setAccounts(data))
-      .catch(console.error);
-  }, []);
 
   return (
     <>

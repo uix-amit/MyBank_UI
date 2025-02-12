@@ -4,7 +4,7 @@ import { UpdateAccountDto } from '@shared/models';
 const initialState: Array<UpdateAccountDto & { Bank: { BankName: string } }> = [];
 
 const savingsAccountSlice = createSlice({
-  name: 'savingsAccount',
+  name: 'savingsAccounts',
   initialState,
   reducers: {
     loadSavingsAccounts: (_, action) => action.payload,
@@ -12,10 +12,15 @@ const savingsAccountSlice = createSlice({
   },
   selectors: {
     getAllSavingsAccounts: (state) => state,
+    getSavingsAccountsAsOption: (state) =>
+      state.map(({ AccountID, AccountNumber }) => ({
+        value: AccountID,
+        label: AccountNumber,
+      })),
   },
 });
 
 export const { loadSavingsAccounts, addSavingsAccounts } = savingsAccountSlice.actions;
-export const { getAllSavingsAccounts } = savingsAccountSlice.selectors;
+export const { getAllSavingsAccounts, getSavingsAccountsAsOption } = savingsAccountSlice.selectors;
 
 export default savingsAccountSlice.reducer;

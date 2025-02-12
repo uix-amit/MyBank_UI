@@ -1,30 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
-import { CreateTransactionConfig, UpdateAccountDto, UpdateLoanDto } from '@shared/models';
+import { CreateTransactionConfig } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
+import { getAllLoanAccounts } from '@shared/store/loanAccounts.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
+import { getAllSavingsAccounts } from '@shared/store/savingsAccounts.slice';
+import useSavingsAccount from '@shared/hooks/useSavingsAccount';
+import useLoans from '@shared/hooks/useLoans';
 
 function LoanTransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
-  const [fromAccount, setFromAccount] = useState<UpdateAccountDto[]>([]);
-  const [toAccount, setToAccount] = useState<UpdateLoanDto[]>([]);
+  const fromAccount = useSelector(getAllSavingsAccounts);
+  const toAccount = useSelector(getAllLoanAccounts);
+  useSavingsAccount();
+  useLoans();
 
   useEffect(() => {
     dispatch(setTitle('Loan Repayment'));
   }, [dispatch]);
-
-  useEffect(() => {
-    Promise.all([axiosInstance.get('/savings-account'), axiosInstance.get('/loans')])
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then(([fromAccountData, toAccountData]: any) => {
-        setFromAccount(fromAccountData);
-        setToAccount(toAccountData);
-      })
-      .catch(console.error);
-  }, []);
 
   const config: CreateTransactionConfig = {
     fromAccount,

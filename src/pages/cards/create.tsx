@@ -1,37 +1,24 @@
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import useSavingsAccount from '@shared/hooks/useSavingsAccount';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import { getSavingsAccountsAsOption } from '@shared/store/savingsAccounts.slice';
 import axiosInstance from '@utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
 
 function CardCreate() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [bankAccounts, setBankAccounts] = useState<{ value: string; label: string }[]>([]);
+  const bankAccounts = useSelector(getSavingsAccountsAsOption);
+  useSavingsAccount();
 
   useEffect(() => {
     dispatch(setTitle('Link new card'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/savings-account')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((response: any) => {
-        const formattedAccountOptions = response.map(
-          ({ AccountID, AccountNumber }: { AccountID: string; AccountNumber: string }) => ({
-            value: AccountID,
-            label: AccountNumber,
-          })
-        );
-        setBankAccounts(formattedAccountOptions);
-      })
-      .catch();
-  }, []);
 
   const formik = useFormik({
     initialValues: {
