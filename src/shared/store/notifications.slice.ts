@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { UpdateNotificationDto } from '@shared/models';
 
 const initialState: UpdateNotificationDto[] = [];
@@ -14,13 +15,17 @@ const notificationsSlice = createSlice({
           ? { ...notification, IsRead: !notification.IsRead }
           : notification
       ),
+    toggleAllNotificationsStatus: (state, action) =>
+      state.map((notification) => ({ ...notification, IsRead: action.payload })),
   },
   selectors: {
     getAllNotifications: (state) => state,
+    isAllNotificationsRead: (state) => state.every(({ IsRead }) => IsRead),
   },
 });
 
-export const { loadNotifications, toggleNotificationStatus } = notificationsSlice.actions;
-export const { getAllNotifications } = notificationsSlice.selectors;
+export const { loadNotifications, toggleNotificationStatus, toggleAllNotificationsStatus } =
+  notificationsSlice.actions;
+export const { getAllNotifications, isAllNotificationsRead } = notificationsSlice.selectors;
 
 export default notificationsSlice.reducer;

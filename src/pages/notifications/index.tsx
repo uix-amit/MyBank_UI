@@ -1,46 +1,33 @@
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import useNotifications from '@shared/hooks/useNotifications';
 import { UpdateNotificationDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
+import {
+  getAllNotifications,
+  isAllNotificationsRead,
+  toggleAllNotificationsStatus,
+  toggleNotificationStatus,
+} from '@shared/store/notifications.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 import axiosInstance from '@utils/axiosInstance';
 
 function Notifications() {
   const dispatch = useDispatch<AppDispatch>();
-  const [notifications, setNotifications] = useState<UpdateNotificationDto[]>([]);
-  const [isAllRead, setIsAllRead] = useState<boolean>(false);
+  const notifications = useSelector(getAllNotifications);
+  const isAllRead = useSelector(isAllNotificationsRead);
+  useNotifications();
 
   useEffect(() => {
     dispatch(setTitle('Notifications'));
   }, [dispatch]);
 
-  useEffect(() => {
-    axiosInstance
-      .get('/notifications')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => {
-        setNotifications(data);
-        setIsAllRead(data.every(({ IsRead }: { IsRead: boolean }) => IsRead));
-      })
-      .catch(console.error);
-  }, []);
-
   const markAsRead = (selectedNotification: UpdateNotificationDto) => {
     axiosInstance
       .patch(`/notifications/${selectedNotification.NotificationID}`, selectedNotification)
-      .then(() => {
-        const updatedNotifications = notifications.map((notification) =>
-          notification.NotificationID === selectedNotification.NotificationID
-            ? selectedNotification
-            : notification
-        );
-
-        setNotifications(updatedNotifications);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setIsAllRead(updatedNotifications.every(({ IsRead }: any) => IsRead));
-      })
+      .then(() => dispatch(toggleNotificationStatus(selectedNotification)))
       .catch(console.error);
   };
 
@@ -50,11 +37,7 @@ function Notifications() {
         notificationIds: notifications.map(({ NotificationID }) => NotificationID),
         IsRead: !isAllRead,
       })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: any) => {
-        setNotifications(data);
-        setIsAllRead(data.every(({ IsRead }: { IsRead: boolean }) => IsRead));
-      })
+      .then(() => dispatch(toggleAllNotificationsStatus(!isAllRead)))
       .catch(console.error);
   };
 
