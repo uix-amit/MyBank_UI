@@ -1,23 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UpdateTransactionDto } from '@shared/models';
 
-const transactionSlice = createSlice({
-  initialState: {
+const initialState: {
+  transactions: UpdateTransactionDto[];
+  activeTransaction: {
+    FromAccountID: string;
+    ToAccountID: string;
+    Amount: number;
+  };
+} = {
+  transactions: [],
+  activeTransaction: {
     FromAccountID: '',
     ToAccountID: '',
     Amount: 0,
   },
-  name: 'transaction',
+};
+const transactionSlice = createSlice({
+  name: 'transactions',
+  initialState,
   reducers: {
-    createTransaction: (_, action) => {
-      return action.payload;
-    },
+    loadTransactions: (state, action) => ({ ...state, transactions: action.payload }),
+    initTransaction: (state, action) => ({
+      ...state,
+      activeTransaction: action.payload,
+    }),
+    addTransaction: (state, action) => ({
+      ...state,
+      transactions: [...state.transactions, ...action.payload],
+    }),
   },
   selectors: {
-    getTransaction: (state) => {
-      return state;
-    },
+    getActiveTransaction: (state) => state.activeTransaction,
+    getTransactions: (state) => state.transactions,
   },
 });
-export const { createTransaction } = transactionSlice.actions;
-export const { getTransaction } = transactionSlice.selectors;
+
+export const { loadTransactions, initTransaction, addTransaction } = transactionSlice.actions;
+export const { getTransactions, getActiveTransaction } = transactionSlice.selectors;
 export default transactionSlice.reducer;

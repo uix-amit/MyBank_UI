@@ -50,11 +50,7 @@ function BankAccountCreate() {
     onSubmit: (values) => {
       axiosInstance
         .post('/savings-account', { ...values, Balance: parseFloat(values.Balance) })
-        .then((data) => {
-          console.log(data);
-
-          navigate('/savings-account');
-        })
+        .then(() => navigate('/savings-account'))
         .catch(console.error);
     },
   });

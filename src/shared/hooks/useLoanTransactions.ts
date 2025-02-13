@@ -5,8 +5,6 @@ import { loadLoanTransactions } from '@shared/store/loanTransactions.slice';
 import axiosInstance from '@utils/axiosInstance';
 
 const useLoanTransactions = ({ url }: { url: string }) => {
-  console.log(url);
-
   const dispatch = useDispatch();
 
   const fetchLoanTransaction = () =>

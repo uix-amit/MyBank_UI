@@ -46,7 +46,6 @@ function TransactionFilters({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (values: any) => {
-    console.log('Form data', values);
     onFilter(values);
   };
 

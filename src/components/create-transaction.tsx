@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { CreateTransactionConfig } from '@shared/models';
-import { createTransaction } from '@shared/store/transaction.slice';
+import { initTransaction } from '@shared/store/transaction.slice';
+import { initLoanTransaction } from '@shared/store/loanTransactions.slice';
 
 function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
   const navigate = useNavigate();
@@ -27,15 +28,23 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
         }),
     }),
     onSubmit: (values) => {
-      dispatch(
-        createTransaction({
-          ...values,
-          Amount: parseFloat(values.Amount),
-        })
-      );
-      navigate(
-        config.transactionType === 'Transfer' ? '/transaction/payment' : '/loan-transaction/payment'
-      );
+      if (config.transactionType === 'Transfer') {
+        dispatch(
+          initTransaction({
+            ...values,
+            Amount: parseFloat(values.Amount),
+          })
+        );
+        navigate('/transaction/payment');
+      } else {
+        dispatch(
+          initLoanTransaction({
+            ...values,
+            Amount: parseFloat(values.Amount),
+          })
+        );
+        navigate('/loan-transaction/payment');
+      }
     },
     onReset: () => {
       formik.resetForm();

@@ -23,7 +23,7 @@ const loanTransactionsSlice = createSlice({
   initialState,
   reducers: {
     loadLoanTransactions: (state, action) => ({ ...state, transactions: action.payload }),
-    createLoanTransaction: (state, action) => ({
+    initLoanTransaction: (state, action) => ({
       ...state,
       activeTransaction: action.payload,
     }),
@@ -38,7 +38,8 @@ const loanTransactionsSlice = createSlice({
   },
 });
 
-export const { loadLoanTransactions, createLoanTransaction } = loanTransactionsSlice.actions;
+export const { loadLoanTransactions, initLoanTransaction, addTransaction } =
+  loanTransactionsSlice.actions;
 export const { getLoanTransactions, getActiveLoanTransaction } = loanTransactionsSlice.selectors;
 
 export default loanTransactionsSlice.reducer;

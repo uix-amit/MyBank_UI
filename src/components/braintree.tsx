@@ -1,10 +1,11 @@
 import dropin, { Dropin } from 'braintree-web-drop-in';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+import { getActiveLoanTransaction } from '@shared/store/loanTransactions.slice';
+import { getActiveTransaction } from '@shared/store/transaction.slice';
 import axiosInstance from '@utils/axiosInstance';
-import { getTransaction } from '@shared/store/transaction.slice';
 
 function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRepayment' }) {
   const [braintreeInstance, setBraintreeInstance] = useState<Dropin | null>(null);
@@ -13,21 +14,20 @@ function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRep
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dropinContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const transaction = useSelector(getTransaction);
+  const activeTransaction = useSelector(getActiveTransaction);
+  const activeLoanTransaction = useSelector(getActiveLoanTransaction);
+  const fetchClientToken = async () =>
+    await axiosInstance
+      .get('/braintree/client-token')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((clientToken: any) => {
+        setClientToken(clientToken);
+        setIsLoading(false);
+      })
+      .catch(console.error);
 
   // Fetch client token from the backend
   useEffect(() => {
-    const fetchClientToken = async () => {
-      await axiosInstance
-        .get('/braintree/client-token')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .then((clientToken: any) => {
-          setClientToken(clientToken);
-          setIsLoading(false);
-        })
-        .catch(console.error);
-    };
-
     fetchClientToken();
   }, []);
 
@@ -72,7 +72,11 @@ function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRep
         const nonce = payload.nonce;
 
         axiosInstance
-          .post('/braintree/checkout', { nonce, transaction, transactionType })
+          .post('/braintree/checkout', {
+            nonce,
+            transaction: transactionType === 'Transfer' ? activeTransaction : activeLoanTransaction,
+            transactionType,
+          })
           .then(() =>
             navigate(transactionType === 'Transfer' ? '/transaction' : '/loan-transaction')
           )

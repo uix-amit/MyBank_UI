@@ -51,8 +51,8 @@ function Signup() {
         .oneOf([Yup.ref('Password'), ''], 'Passwords must match'),
     }),
     onSubmit: (values) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { ConfirmPassword, ...payload } = values;
-      console.log('ConfirmPassword: ', ConfirmPassword);
 
       axios
         .post(`${BASE_URL}/users`, {
@@ -60,7 +60,7 @@ function Signup() {
           DateOfBirth: new Date(values.DateOfBirth).toISOString(),
         })
         .then(() => navigate('/auth/signin'))
-        .catch((error) => console.log(error));
+        .catch(console.error);
     },
     onReset: () => {
       formik.resetForm();

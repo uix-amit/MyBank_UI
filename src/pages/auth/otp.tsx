@@ -16,14 +16,13 @@ function Otp() {
         .matches(/^\d{6}$/, 'OTP must be exactly 6 digits'),
     }),
     onSubmit: (values) => {
-      console.log('OTP submitted:', values);
       axios
         .post(`${BASE_URL}/auth/otp`, { otp: +values.otp, id: params.get('id') })
         .then(({ data }) => {
           sessionStorage.setItem('jwt', data.access_token);
           navigate('/');
         })
-        .catch((error) => console.log(error));
+        .catch(console.error);
     },
     onReset: () => {
       formik.resetForm();

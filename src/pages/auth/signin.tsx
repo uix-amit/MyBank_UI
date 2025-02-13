@@ -17,7 +17,6 @@ function Signin() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: (values) => {
-      console.log('Form data', values);
       axios
         .post(`${BASE_URL}/auth/login`, values)
         .then(({ data }) => {
@@ -28,7 +27,7 @@ function Signin() {
             navigate('/');
           }
         })
-        .catch((error) => console.log(error));
+        .catch(console.error);
     },
     onReset: () => {
       formik.resetForm();
