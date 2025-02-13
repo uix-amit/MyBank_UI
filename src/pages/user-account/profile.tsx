@@ -1,17 +1,31 @@
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import useUsers from '@shared/hooks/useUsers';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import { getUser, getUserId } from '@shared/store/users.slice';
 import axiosInstance from '@utils/axiosInstance';
 
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [userID, setUserID] = useState(null);
+  const userID = useSelector(getUserId);
+  const user = useSelector(getUser);
+  useUsers();
+
+  useEffect(() => {
+    formik.setValues({
+      FirstName: user.FirstName || '',
+      LastName: user.LastName || '',
+      Email: user.Email || '',
+      PhoneNumber: user.PhoneNumber || '',
+      DateOfBirth: user.DateOfBirth?.split('T')[0] || '',
+    });
+  }, [user]);
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +57,7 @@ function Profile() {
       axiosInstance
         .patch(`/users/${userID}`, {
           ...values,
-          DateOfBirth: new Date(values.DateOfBirth).toISOString(),
+          DateOfBirth: new Date(values.DateOfBirth as string).toISOString(),
         })
         .then(() => navigate('/'))
         .catch(console.error);
@@ -56,17 +70,6 @@ function Profile() {
   useEffect(() => {
     dispatch(setTitle('profile'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/users')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((userDetails: any) => {
-        setUserID(userDetails.UserID);
-        formik.setValues({ ...userDetails, DateOfBirth: userDetails.DateOfBirth.split('T')[0] });
-      })
-      .catch(console.error);
-  }, []);
 
   return (
     <>

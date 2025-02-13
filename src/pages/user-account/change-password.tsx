@@ -1,17 +1,20 @@
 import axiosInstance from '@utils/axiosInstance';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import useUsers from '@shared/hooks/useUsers';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
+import { getUserId } from '@shared/store/users.slice';
 
 function ChangePassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [userID, setUserID] = useState(null);
+  const userID = useSelector(getUserId);
+  useUsers();
   const formik = useFormik({
     initialValues: {
       Password: '',
@@ -44,14 +47,6 @@ function ChangePassword() {
   useEffect(() => {
     dispatch(setTitle('change Password'));
   }, [dispatch]);
-
-  useEffect(() => {
-    axiosInstance
-      .get('/users')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then(({ UserID }: any) => setUserID(UserID))
-      .catch(console.error);
-  }, []);
 
   return (
     <>

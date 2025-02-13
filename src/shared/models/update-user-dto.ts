@@ -74,7 +74,7 @@ export interface UpdateUserDto {
      * @memberof UpdateUserDto
      * @example 2024-07-10T06:52:41.151Z
      */
-    DateOfBirth?: Date;
+    DateOfBirth?: String;
 
     /**
      * @type {Date}

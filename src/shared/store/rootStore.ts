@@ -9,7 +9,7 @@ import loanTransactionsSlice from './loanTransactions.slice';
 import notificationsSlice from './notifications.slice';
 import savingsAccountsSlice from './savingsAccounts.slice';
 import transactionSlice from './transaction.slice';
-import usersSlice from './users.slice';
+import userSlice from './users.slice';
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +22,7 @@ export const store = configureStore({
     notifications: notificationsSlice,
     savingsAccounts: savingsAccountsSlice,
     transactions: transactionSlice,
-    users: usersSlice,
+    user: userSlice,
   },
 });
 
