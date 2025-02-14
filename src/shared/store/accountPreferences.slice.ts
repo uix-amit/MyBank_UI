@@ -4,6 +4,10 @@ import { UpdateAccountPreferencesDto } from '@shared/models';
 const initialState: UpdateAccountPreferencesDto = {
   AccountPreferenceID: '',
   UserID: '',
+  EmailNotifications: false,
+  EnableTwoFactorAuth: false,
+  PushNotifications: false,
+  SMSNotifications: false,
 };
 
 const accountPreferencesSlice = createSlice({
