@@ -8,6 +8,7 @@ import loanAccountsSlice from './loanAccounts.slice';
 import loanTransactionsSlice from './loanTransactions.slice';
 import notificationsSlice from './notifications.slice';
 import savingsAccountsSlice from './savingsAccounts.slice';
+import toastSlice from './toast.slice';
 import transactionSlice from './transaction.slice';
 import userSlice from './users.slice';
 
@@ -21,6 +22,7 @@ export const store = configureStore({
     loanTransactions: loanTransactionsSlice,
     notifications: notificationsSlice,
     savingsAccounts: savingsAccountsSlice,
+    toast: toastSlice,
     transactions: transactionSlice,
     user: userSlice,
   },
