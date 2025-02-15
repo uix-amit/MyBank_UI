@@ -9,6 +9,7 @@ const notificationsSlice = createSlice({
   initialState,
   reducers: {
     loadNotifications: (_, action) => action.payload,
+    addNotification: (state, action) => [action.payload, ...state],
     toggleNotificationStatus: (state, action) =>
       state.map((notification) =>
         notification.NotificationID === action.payload.NotificationID
@@ -24,8 +25,12 @@ const notificationsSlice = createSlice({
   },
 });
 
-export const { loadNotifications, toggleNotificationStatus, toggleAllNotificationsStatus } =
-  notificationsSlice.actions;
+export const {
+  loadNotifications,
+  addNotification,
+  toggleNotificationStatus,
+  toggleAllNotificationsStatus,
+} = notificationsSlice.actions;
 export const { getAllNotifications, isAllNotificationsRead } = notificationsSlice.selectors;
 
 export default notificationsSlice.reducer;

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 import { Toast } from '@shared/models/toast';
 
@@ -8,7 +8,7 @@ const toastSlice = createSlice({
   name: 'toast',
   initialState,
   reducers: {
-    addToastMessage: (state, action) => [...state, ...action.payload],
+    addToastMessage: (state, action) => [...state, { ...action.payload, id: nanoid() }],
     removeToastMessage: (state, action) => state.filter(({ id }) => id !== action.payload),
   },
   selectors: {
