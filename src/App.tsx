@@ -4,8 +4,11 @@ import Footer from '@components/footer';
 import Header from '@components/header';
 import Sidebar from '@components/sidebar';
 import Toast from '@components/toast';
+import { userApi } from '@shared/api/userApi';
 
 function App() {
+  userApi.useGetUserQuery();
+
   return (
     <>
       <Sidebar

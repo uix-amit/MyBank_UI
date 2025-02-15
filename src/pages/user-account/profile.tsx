@@ -1,29 +1,26 @@
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import useUsers from '@shared/hooks/useUsers';
+import { userApi } from '@shared/api/userApi';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { getUser, getUserId } from '@shared/store/users.slice';
-import axiosInstance from '@utils/axiosInstance';
 
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const userID = useSelector(getUserId);
-  const user = useSelector(getUser);
-  useUsers();
+  const { data: user, isLoading } = userApi.useGetUserQuery();
+  const [updateUser] = userApi.useUpdateUserMutation();
 
   useEffect(() => {
     formik.setValues({
-      FirstName: user.FirstName || '',
-      LastName: user.LastName || '',
-      Email: user.Email || '',
-      PhoneNumber: user.PhoneNumber || '',
-      DateOfBirth: user.DateOfBirth?.split('T')[0] || '',
+      FirstName: user?.FirstName || '',
+      LastName: user?.LastName || '',
+      Email: user?.Email || '',
+      PhoneNumber: user?.PhoneNumber || '',
+      DateOfBirth: user?.DateOfBirth?.split('T')[0] || '',
     });
   }, [user]);
 
@@ -53,14 +50,14 @@ function Profile() {
           'You must be at least 18 years old'
         ),
     }),
-    onSubmit: (values) => {
-      axiosInstance
-        .patch(`/users/${userID}`, {
-          ...values,
-          DateOfBirth: new Date(values.DateOfBirth as string).toISOString(),
-        })
-        .then(() => navigate('/'))
-        .catch(console.error);
+    onSubmit: async (values) => {
+      await updateUser({
+        ...values,
+        UserID: user?.UserID as string,
+        UserName: user?.UserName as string,
+        DateOfBirth: new Date(values.DateOfBirth as string).toISOString(),
+      });
+      navigate('/');
     },
     onReset: () => {
       formik.resetForm();
@@ -70,6 +67,10 @@ function Profile() {
   useEffect(() => {
     dispatch(setTitle('profile'));
   }, [dispatch]);
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>

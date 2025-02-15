@@ -1,20 +1,23 @@
-import axiosInstance from '@utils/axiosInstance';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import useUsers from '@shared/hooks/useUsers';
+import { userApi } from '@shared/api/userApi';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { getUserId } from '@shared/store/users.slice';
 
 function ChangePassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const userID = useSelector(getUserId);
-  useUsers();
+  const { data: user, isLoading } = userApi.useGetUserQuery();
+  const [updateUser] = userApi.useUpdateUserMutation();
+
+  useEffect(() => {
+    dispatch(setTitle('change Password'));
+  }, [dispatch]);
+
   const formik = useFormik({
     initialValues: {
       Password: '',
@@ -33,20 +36,22 @@ function ChangePassword() {
         .required('Confirm Password is required')
         .oneOf([Yup.ref('Password'), ''], 'Passwords must match'),
     }),
-    onSubmit: ({ Password }) => {
-      axiosInstance
-        .patch(`/users/${userID}`, { Password, UserID: userID })
-        .then(() => navigate('/auth'))
-        .catch(console.error);
+    onSubmit: async ({ Password }) => {
+      await updateUser({
+        Password,
+        UserID: user?.UserID as string,
+        UserName: user?.UserName as string,
+      });
+      navigate('/auth');
     },
     onReset: () => {
       formik.resetForm();
     },
   });
 
-  useEffect(() => {
-    dispatch(setTitle('change Password'));
-  }, [dispatch]);
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
