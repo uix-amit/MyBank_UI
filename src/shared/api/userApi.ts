@@ -1,20 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { CreateUserDto, UpdateUserDto } from '@shared/models';
-import { BASE_URL } from '@utils/constants';
+import { baseQuery } from './baseQuery';
 
 export const userApi = createApi({
   reducerPath: 'user',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-    prepareHeaders: (headers) => {
-      const token = sessionStorage.getItem('jwt');
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery,
   tagTypes: ['User'],
   endpoints: (builder) => ({
     // Get user

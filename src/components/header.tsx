@@ -1,14 +1,17 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import useNotifications from '@shared/hooks/useNotifications';
+import notificationsApi from '@shared/api/notificationsApi';
 import { getTitle } from '@shared/store/header.slice';
-import { isAllNotificationsRead } from '@shared/store/notifications.slice';
 
 function Header() {
   const title: string = useSelector(getTitle);
-  const hasUnreadNotification = useSelector(isAllNotificationsRead);
-  useNotifications();
+  const { data: notifications, isLoading } = notificationsApi.useGetNotificationsQuery();
+  const hasUnreadNotification: boolean = !!notifications?.every(({ IsRead }) => IsRead);
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <header className='shadow sticky top-0 z-20 flex'>

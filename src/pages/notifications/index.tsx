@@ -1,45 +1,37 @@
 import { format } from 'date-fns';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import useNotifications from '@shared/hooks/useNotifications';
+import notificationsApi from '@shared/api/notificationsApi';
 import { UpdateNotificationDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
-import {
-  getAllNotifications,
-  isAllNotificationsRead,
-  toggleAllNotificationsStatus,
-  toggleNotificationStatus,
-} from '@shared/store/notifications.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 
 function Notifications() {
   const dispatch = useDispatch<AppDispatch>();
-  const notifications = useSelector(getAllNotifications);
-  const isAllRead = useSelector(isAllNotificationsRead);
-  useNotifications();
+  const { data: notifications, isLoading } = notificationsApi.useGetNotificationsQuery();
+  const isAllRead: boolean = !!notifications?.every(({ IsRead }) => IsRead);
+  const [updateNotification] = notificationsApi.useUpdateNotificationMutation();
+  const [toggleNotifications] = notificationsApi.useToggleNotificationsMutation();
 
   useEffect(() => {
     dispatch(setTitle('Notifications'));
   }, [dispatch]);
 
-  const markAsRead = (selectedNotification: UpdateNotificationDto) => {
-    axiosInstance
-      .patch(`/notifications/${selectedNotification.NotificationID}`, selectedNotification)
-      .then(() => dispatch(toggleNotificationStatus(selectedNotification)))
-      .catch(console.error);
+  const markAsRead = async (selectedNotification: UpdateNotificationDto) => {
+    await updateNotification(selectedNotification);
   };
 
-  const markAllAsRead = () => {
-    axiosInstance
-      .patch('/notifications/toggle-read', {
-        notificationIds: notifications.map(({ NotificationID }) => NotificationID),
-        IsRead: !isAllRead,
-      })
-      .then(() => dispatch(toggleAllNotificationsStatus(!isAllRead)))
-      .catch(console.error);
+  const markAllAsRead = async () => {
+    await toggleNotifications({
+      notificationIds: notifications?.map(({ NotificationID }) => NotificationID) || [],
+      IsRead: !isAllRead,
+    });
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -58,7 +50,7 @@ function Notifications() {
         </div>
       </div>
       <div className='w-full lg:w-full flex flex-col p-4 bg-white rounded-lg shadow-lg'>
-        {notifications.map((notification) => (
+        {notifications?.map((notification) => (
           <div
             key={notification.NotificationID}
             className={`p-1 rounded-lg mb-1 hover:bg-gray-300 ${notification.IsRead ? 'bg-gray-100' : 'bg-white'}`}

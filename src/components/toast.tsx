@@ -9,11 +9,7 @@ const Toast = () => {
 
   useEffect(() => {
     const timeouts = toastMessages.map((toast) =>
-      setTimeout(() => {
-        console.log(toast);
-
-        dispatch(removeToastMessage(toast.id));
-      }, toast.timeout * 1000)
+      setTimeout(() => dispatch(removeToastMessage(toast.id)), toast.timeout * 1000)
     );
 
     return () => {
