@@ -4,17 +4,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import savingsAccountApi from '@shared/api/savingsAccountApi';
 import useBanks from '@shared/hooks/useBanks';
 import { getBanks } from '@shared/store/banks.slice';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 import { CURRENCIES, STATUSES } from '@utils/constants';
+import { AccoutStatus, Currency } from '@shared/models';
+import userApi from '@shared/api/userApi';
 
 function BankAccountCreate() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const banks = useSelector(getBanks);
+  const { data: user } = userApi.useGetUserQuery();
+  const [createSavingsAccount] = savingsAccountApi.useCreateSavingsAccountMutation();
   useBanks();
 
   useEffect(() => {
@@ -47,11 +51,15 @@ function BankAccountCreate() {
       Currency: Yup.string().required('Currency is required'),
       Status: Yup.string().required('Status is required'),
     }),
-    onSubmit: (values) => {
-      axiosInstance
-        .post('/savings-account', { ...values, Balance: parseFloat(values.Balance) })
-        .then(() => navigate('/savings-account'))
-        .catch(console.error);
+    onSubmit: async (values) => {
+      await createSavingsAccount({
+        ...values,
+        Balance: parseFloat(values.Balance),
+        UserID: user?.UserID as string,
+        Currency: values.Currency as Currency,
+        Status: values.Status as AccoutStatus,
+      });
+      navigate('/savings-account');
     },
   });
 

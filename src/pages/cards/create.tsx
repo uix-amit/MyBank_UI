@@ -1,20 +1,20 @@
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import useSavingsAccount from '@shared/hooks/useSavingsAccount';
+import savingsAccountApi from '@shared/api/savingsAccountApi';
+import { UpdateAccountDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { getSavingsAccountsAsOption } from '@shared/store/savingsAccounts.slice';
 import axiosInstance from '@utils/axiosInstance';
+import { getSavingsAccountsAsOptions } from '@utils/utils';
 
 function CardCreate() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const bankAccounts = useSelector(getSavingsAccountsAsOption);
-  useSavingsAccount();
+  const { data, isLoading } = savingsAccountApi.useGetSavingsAccountsQuery();
 
   useEffect(() => {
     dispatch(setTitle('Link new card'));
@@ -54,6 +54,11 @@ function CardCreate() {
     },
   });
 
+  if (isLoading) {
+    return <></>;
+  }
+  const bankAccounts = getSavingsAccountsAsOptions(data as UpdateAccountDto[]);
+
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Link my new card</h2>
@@ -74,11 +79,12 @@ function CardCreate() {
             className={`mt-1 block w-full select select-bordered ${formik.touched.AccountID && formik.errors.AccountID ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring focus:ring-opacity-50`}
           >
             <option value=''>Select an account number</option>
-            {bankAccounts.map((account) => (
-              <option key={account.value} value={account.value}>
-                {account.label}
-              </option>
-            ))}
+            {bankAccounts &&
+              bankAccounts.map((account) => (
+                <option key={account.value} value={account.value}>
+                  {account.label}
+                </option>
+              ))}
           </select>
           {formik.touched.AccountID && formik.errors.AccountID ? (
             <div className='text-red-500 text-sm mt-1'>{formik.errors.AccountID}</div>

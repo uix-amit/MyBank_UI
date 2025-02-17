@@ -2,27 +2,29 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
-import { CreateTransactionConfig } from '@shared/models';
+import savingsAccountApi from '@shared/api/savingsAccountApi';
+import useLoans from '@shared/hooks/useLoans';
+import { CreateTransactionConfig, UpdateAccountDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { getAllLoanAccounts } from '@shared/store/loanAccounts.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { getAllSavingsAccounts } from '@shared/store/savingsAccounts.slice';
-import useSavingsAccount from '@shared/hooks/useSavingsAccount';
-import useLoans from '@shared/hooks/useLoans';
 
 function LoanTransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
-  const fromAccount = useSelector(getAllSavingsAccounts);
+  const { data: fromAccount, isLoading } = savingsAccountApi.useGetSavingsAccountsQuery();
   const toAccount = useSelector(getAllLoanAccounts);
-  useSavingsAccount();
   useLoans();
 
   useEffect(() => {
     dispatch(setTitle('Loan Repayment'));
   }, [dispatch]);
 
+  if (isLoading) {
+    return <></>;
+  }
+
   const config: CreateTransactionConfig = {
-    fromAccount,
+    fromAccount: fromAccount as UpdateAccountDto[],
     toAccount,
     transactionType: 'LoanRepayment',
   };

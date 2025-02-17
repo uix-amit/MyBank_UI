@@ -1,25 +1,27 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import CreateTransaction from '@components/create-transaction';
-import useSavingsAccount from '@shared/hooks/useSavingsAccount';
-import { CreateTransactionConfig } from '@shared/models';
+import savingsAccountApi from '@shared/api/savingsAccountApi';
+import { CreateTransactionConfig, UpdateAccountDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import { getAllSavingsAccounts } from '@shared/store/savingsAccounts.slice';
 
 function TransactionCreate() {
   const dispatch = useDispatch<AppDispatch>();
-  const savingsAccount = useSelector(getAllSavingsAccounts);
-  useSavingsAccount();
+  const { data: savingsAccounts, isLoading } = savingsAccountApi.useGetSavingsAccountsQuery();
 
   useEffect(() => {
     dispatch(setTitle('Transfer Money'));
   }, [dispatch]);
 
+  if (isLoading) {
+    return <></>;
+  }
+
   const config: CreateTransactionConfig = {
-    fromAccount: savingsAccount,
-    toAccount: savingsAccount,
+    fromAccount: savingsAccounts as UpdateAccountDto[],
+    toAccount: savingsAccounts as UpdateAccountDto[],
     transactionType: 'Transfer',
   };
 
