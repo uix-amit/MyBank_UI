@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-import { UpdateCardDto } from '@shared/models';
+import { CreateCardDto, UpdateCardDto } from '@shared/models';
 import { CardList } from '@shared/models/card-list.dto';
 import { baseQuery } from './baseQuery';
 
@@ -19,7 +19,7 @@ export const cardsApi = createApi({
       providesTags: (_result, _error, cardId) => [{ type: 'Card', id: cardId }],
     }),
 
-    createCard: builder.mutation<UpdateCardDto, UpdateCardDto>({
+    createCard: builder.mutation<CreateCardDto, CreateCardDto>({
       query: (body) => ({
         url: '/cards',
         method: 'POST',

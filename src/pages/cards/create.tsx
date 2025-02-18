@@ -4,17 +4,18 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import cardsApi from '@shared/api/cardsApi';
 import savingsAccountApi from '@shared/api/savingsAccountApi';
 import { UpdateAccountDto } from '@shared/models';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 import { getSavingsAccountsAsOptions } from '@utils/utils';
 
 function CardCreate() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { data, isLoading } = savingsAccountApi.useGetSavingsAccountsQuery();
+  const [createCard] = cardsApi.useCreateCardMutation();
 
   useEffect(() => {
     dispatch(setTitle('Link new card'));
@@ -39,15 +40,13 @@ function CardCreate() {
         .matches(/^\d{3}$/, 'CVV must be exactly 3 digits')
         .required('CVV is required'),
     }),
-    onSubmit: (values) => {
-      axiosInstance
-        .post('/cards', {
-          ...values,
-          ExpirationDate: new Date(values.ExpirationDate).toISOString(),
-          CVV: parseInt(values.CVV),
-        })
-        .then(() => navigate('/cards'))
-        .catch(console.error);
+    onSubmit: async (values) => {
+      await createCard({
+        ...values,
+        ExpirationDate: new Date(values.ExpirationDate).toISOString(),
+        CVV: parseInt(values.CVV),
+      });
+      navigate('/cards');
     },
     onReset: () => {
       formik.resetForm();

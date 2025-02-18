@@ -45,7 +45,7 @@ export interface UpdateCardDto {
    * @memberof UpdateCardDto
    * @example 2024-07-10T06:52:41.153Z
    */
-  ExpirationDate: Date;
+  ExpirationDate: Date | String;
 
   /**
    * @type {number}
