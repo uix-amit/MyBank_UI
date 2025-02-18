@@ -1,37 +1,31 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import TransactionFilters from '@components/transaction-filters';
 import TransactionTable from '@components/transaction-table';
-import useLoanTransactions from '@shared/hooks/useLoanTransactions';
+import loanTransactionsApi from '@shared/api/loanTransactionsApi';
 import { FilterTransaction } from '@shared/models/filter-transaction-dto';
 import { setTitle } from '@shared/store/header.slice';
-import { getLoanTransactions } from '@shared/store/loanTransactions.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 
 function LoanTransaction() {
   const dispatch = useDispatch<AppDispatch>();
-  const loanTransactions = useSelector(getLoanTransactions);
-  const [url, setUrl] = useState('/loan-transactions');
-  useLoanTransactions({ url });
+  const [filters, setFilters] = useState<FilterTransaction | void>();
+  const { data: loanTransactions } = loanTransactionsApi.useGetLoanTransactionsQuery(filters);
 
   useEffect(() => {
     dispatch(setTitle('loan transaction history'));
   }, [dispatch]);
 
-  const handleFilterTransactions = (filters: FilterTransaction) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filterParams = new URLSearchParams(filters as any).toString();
-    setUrl(`/loan-transactions/filter?${filterParams}`);
-  };
+  const handleFilterTransactions = (filters: FilterTransaction) => setFilters(filters);
 
   return (
     <>
       <h2 className='text-xl font-bold mb-4'>Filters</h2>
       <TransactionFilters isLoanFilter={true} onFilter={handleFilterTransactions} />
       <h2 className='text-xl font-bold mb-4'>Transaction History</h2>
-      <TransactionTable transactions={loanTransactions} />
+      {loanTransactions && <TransactionTable transactions={loanTransactions} />}
       <div className='text-primary p-4 flex justify-end'>
         <Link to={'create'} className='w-fit'>
           Make another payment

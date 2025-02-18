@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from './baseQuery';
+
 import { UpdateTransactionDto } from '@shared/models';
 import { FilterTransaction } from '@shared/models/filter-transaction-dto';
+import { baseQuery } from './baseQuery';
 
 export const transactionsApi = createApi({
   reducerPath: 'transactionsApi',

@@ -17,9 +17,7 @@ function Transaction() {
     dispatch(setTitle('Transaction history'));
   }, [dispatch]);
 
-  const handleFilterTransactions = (filters: FilterTransaction) => {
-    setFilters(filters);
-  };
+  const handleFilterTransactions = (filters: FilterTransaction) => setFilters(filters);
 
   return (
     <>
