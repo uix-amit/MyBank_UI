@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './baseQuery';
-import { UpdateLoanDto } from '@shared/models';
+import { CreateLoanDto, UpdateLoanDto } from '@shared/models';
 
 export const loansApi = createApi({
   reducerPath: 'loansApi',
@@ -17,7 +17,7 @@ export const loansApi = createApi({
       providesTags: (_result, _error, loanId) => [{ type: 'Loan', id: loanId }],
     }),
 
-    createLoan: builder.mutation<UpdateLoanDto, UpdateLoanDto>({
+    createLoan: builder.mutation<CreateLoanDto, CreateLoanDto>({
       query: (body) => ({
         url: '/loans',
         method: 'POST',

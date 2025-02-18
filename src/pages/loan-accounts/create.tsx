@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import loansApi from '@shared/api/loansApi';
 import useBanks from '@shared/hooks/useBanks';
+import { LoanAccountStatus, LoanType } from '@shared/models';
 import { getBanks } from '@shared/store/banks.slice';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 import { LOAN_TYPES } from '@utils/constants';
 
 function LoanAccountCreate() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const banks = useSelector(getBanks);
+  const [createLoanAccount] = loansApi.useCreateLoanMutation();
   useBanks();
 
   useEffect(() => {
@@ -60,16 +62,18 @@ function LoanAccountCreate() {
         .positive('Loan term must be a positive number')
         .max(30, 'Loan term cannot exceed 30 years'),
     }),
-    onSubmit: (values) => {
-      axiosInstance
-        .post('/loans', {
-          ...values,
-          LoanTerm: parseInt(values.LoanTerm),
-          LoanAmount: parseFloat(values.LoanAmount),
-          InterestRate: parseFloat(values.InterestRate),
-        })
-        .then(() => navigate('/loan-account'))
-        .catch(console.error);
+    onSubmit: async (values) => {
+      await createLoanAccount({
+        ...values,
+        LoanType: values.LoanType as LoanType,
+        LoanTerm: parseInt(values.LoanTerm),
+        LoanAmount: parseFloat(values.LoanAmount),
+        InterestRate: parseFloat(values.InterestRate),
+        LoanStartDate: new Date().toISOString(),
+        RemainingTenure: 300,
+        LoanStatus: LoanAccountStatus.OUTSTANDING,
+      });
+      navigate('/loan-account');
     },
   });
 
