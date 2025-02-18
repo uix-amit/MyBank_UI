@@ -1,21 +1,26 @@
 import dropin, { Dropin } from 'braintree-web-drop-in';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { getActiveLoanTransaction } from '@shared/store/loanTransactions.slice';
-import { getActiveTransaction } from '@shared/store/transaction.slice';
 import axiosInstance from '@utils/axiosInstance';
 
-function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRepayment' }) {
+function Braintree({
+  transactionType,
+  transactionData,
+}: {
+  transactionType: 'Transfer' | 'LoanRepayment';
+  transactionData: {
+    FromAccountID: string;
+    ToAccountID: string;
+    Amount: number;
+  };
+}) {
   const [braintreeInstance, setBraintreeInstance] = useState<Dropin | null>(null);
   const [clientToken, setClientToken] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dropinContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const activeTransaction = useSelector(getActiveTransaction);
-  const activeLoanTransaction = useSelector(getActiveLoanTransaction);
   const fetchClientToken = async () =>
     await axiosInstance
       .get('/braintree/client-token')
@@ -74,7 +79,7 @@ function Braintree({ transactionType }: { transactionType: 'Transfer' | 'LoanRep
         axiosInstance
           .post('/braintree/checkout', {
             nonce,
-            transaction: transactionType === 'Transfer' ? activeTransaction : activeLoanTransaction,
+            transaction: transactionData,
             transactionType,
           })
           .then(() =>

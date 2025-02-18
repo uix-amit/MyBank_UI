@@ -15,7 +15,7 @@ export const userApi = createApi({
     }),
 
     // Create a new user
-    createUser: builder.mutation<CreateUserDto, UpdateUserDto>({
+    createUser: builder.mutation<CreateUserDto, CreateUserDto>({
       query: (body) => ({
         url: '/users',
         method: 'POST',

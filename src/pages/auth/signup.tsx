@@ -1,12 +1,12 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { BASE_URL } from '@utils/constants';
+import userApi from '@shared/api/userApi';
 
 function Signup() {
   const navigate = useNavigate();
+  const [createUser] = userApi.useCreateUserMutation();
   const formik = useFormik({
     initialValues: {
       FirstName: '',
@@ -54,13 +54,11 @@ function Signup() {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { ConfirmPassword, ...payload } = values;
 
-      axios
-        .post(`${BASE_URL}/users`, {
-          ...payload,
-          DateOfBirth: new Date(values.DateOfBirth).toISOString(),
-        })
-        .then(() => navigate('/auth/signin'))
-        .catch(console.error);
+      createUser({
+        ...payload,
+        DateOfBirth: new Date(values.DateOfBirth).toISOString(),
+      });
+      navigate('/auth/signin');
     },
     onReset: () => {
       formik.resetForm();

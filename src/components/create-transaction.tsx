@@ -1,15 +1,11 @@
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { CreateTransactionConfig } from '@shared/models';
-import { initTransaction } from '@shared/store/transaction.slice';
-import { initLoanTransaction } from '@shared/store/loanTransactions.slice';
 
 function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       FromAccountID: '',
@@ -28,23 +24,17 @@ function CreateTransaction({ config }: { config: CreateTransactionConfig }) {
         }),
     }),
     onSubmit: (values) => {
-      if (config.transactionType === 'Transfer') {
-        dispatch(
-          initTransaction({
+      navigate(
+        config.transactionType === 'Transfer'
+          ? '/transaction/payment'
+          : '/loan-transaction/payment',
+        {
+          state: {
             ...values,
             Amount: parseFloat(values.Amount),
-          })
-        );
-        navigate('/transaction/payment');
-      } else {
-        dispatch(
-          initLoanTransaction({
-            ...values,
-            Amount: parseFloat(values.Amount),
-          })
-        );
-        navigate('/loan-transaction/payment');
-      }
+          },
+        }
+      );
     },
     onReset: () => {
       formik.resetForm();

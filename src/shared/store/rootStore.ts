@@ -7,17 +7,15 @@ import loansApi from '@shared/api/loansApi';
 import notificationsApi from '@shared/api/notificationsApi';
 import savingsAccountApi from '@shared/api/savingsAccountApi';
 import transactionsApi from '@shared/api/transactionsApi';
-import { userApi } from '@shared/api/userApi';
+import userApi from '@shared/api/userApi';
 import banksSlice from './banks.slice';
 import headerSlice from './header.slice';
-import loanAccountsSlice from './loanAccounts.slice';
 import toastSlice from './toast.slice';
 
 export const store = configureStore({
   reducer: {
     banks: banksSlice,
     header: headerSlice,
-    loanAccounts: loanAccountsSlice,
     toast: toastSlice,
     [userApi.reducerPath]: userApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
