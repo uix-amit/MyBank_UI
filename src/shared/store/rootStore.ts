@@ -12,6 +12,7 @@ import loanTransactionsSlice from './loanTransactions.slice';
 import toastSlice from './toast.slice';
 import transactionSlice from './transaction.slice';
 import loansApi from '@shared/api/loansApi';
+import transactionsApi from '@shared/api/transactionsApi';
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
     [accountPreferencesApi.reducerPath]: accountPreferencesApi.reducer,
     [cardsApi.reducerPath]: cardsApi.reducer,
     [loansApi.reducerPath]: loansApi.reducer,
+    [transactionsApi.reducerPath]: transactionsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -35,7 +37,8 @@ export const store = configureStore({
       savingsAccountApi.middleware,
       accountPreferencesApi.middleware,
       cardsApi.middleware,
-      loansApi.middleware
+      loansApi.middleware,
+      transactionsApi.middleware
     ),
 });
 
