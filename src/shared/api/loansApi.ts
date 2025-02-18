@@ -1,0 +1,48 @@
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQuery } from './baseQuery';
+import { UpdateLoanDto } from '@shared/models';
+
+export const loansApi = createApi({
+  reducerPath: 'loansApi',
+  baseQuery,
+  tagTypes: ['Loan'],
+  endpoints: (builder) => ({
+    getLoans: builder.query<Array<UpdateLoanDto & { Bank: { BankName: string } }>, void>({
+      query: () => '/loans',
+      providesTags: ['Loan'],
+    }),
+
+    getLoanById: builder.query<UpdateLoanDto, string>({
+      query: (loanId) => `/loans/${loanId}`,
+      providesTags: (_result, _error, loanId) => [{ type: 'Loan', id: loanId }],
+    }),
+
+    createLoan: builder.mutation<UpdateLoanDto, UpdateLoanDto>({
+      query: (body) => ({
+        url: '/loans',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Loan'],
+    }),
+
+    updateLoan: builder.mutation<UpdateLoanDto, UpdateLoanDto>({
+      query: (body) => ({
+        url: `/loans/${body.LoanID}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { LoanID }) => [{ type: 'Loan', id: LoanID }],
+    }),
+
+    deleteLoan: builder.mutation<void, string>({
+      query: (loanId) => ({
+        url: `/loans/${loanId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, loanId) => [{ type: 'Loan', id: loanId }],
+    }),
+  }),
+});
+
+export default loansApi;
