@@ -1,23 +1,24 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import AtmCard from '@components/atm-card';
 import CardItem from '@components/card-item';
-import { CardList } from '@shared/models/card-list.dto';
-import { getCards } from '@shared/store/cards.slice';
+import cardsApi from '@shared/api/cardsApi';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import useCards from '@shared/hooks/useCards';
 
 function Card() {
   const dispatch = useDispatch<AppDispatch>();
-  const cardlistResponse: CardList = useSelector(getCards);
-  useCards();
+  const { data: cardlistResponse, isLoading } = cardsApi.useGetCardsQuery();
 
   useEffect(() => {
     dispatch(setTitle('Cards'));
   }, [dispatch]);
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
