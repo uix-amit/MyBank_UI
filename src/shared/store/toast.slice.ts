@@ -8,7 +8,15 @@ const toastSlice = createSlice({
   name: 'toast',
   initialState,
   reducers: {
-    addToastMessage: (state, action) => [...state, { ...action.payload, id: nanoid() }],
+    addToastMessage: (state, action) => [
+      ...state,
+      {
+        message: action.payload.message,
+        id: nanoid(),
+        timeout: action.payload.timeout || 3,
+        type: action.payload.type || 'success',
+      },
+    ],
     removeToastMessage: (state, action) => state.filter(({ id }) => id !== action.payload),
   },
   selectors: {

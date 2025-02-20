@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { CreateAccountDto, UpdateAccountDto } from '@shared/models';
+import { addToastMessage } from '@shared/store/toast.slice';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
 
@@ -25,7 +26,7 @@ export const savingsAccountApi = createApi({
     }),
 
     // Create a new savings account
-    createSavingsAccount: builder.mutation<CreateAccountDto, CreateAccountDto>({
+    createSavingsAccount: builder.mutation<{ message: string }, CreateAccountDto>({
       query: (body) => ({
         url: '/savings-account',
         method: 'POST',
@@ -33,12 +34,14 @@ export const savingsAccountApi = createApi({
       }),
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled;
+          const {
+            data: { message },
+          } = await queryFulfilled;
+          dispatch(addToastMessage({ message }));
+          dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
         } catch (error) {
           console.error(error);
         }
-
-        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
       },
       invalidatesTags: ['SavingsAccount'],
     }),

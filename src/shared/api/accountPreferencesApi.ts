@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { CreateAccountPreferencesDto, UpdateAccountPreferencesDto } from '@shared/models';
+import { addToastMessage } from '@shared/store/toast.slice';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
 
@@ -26,10 +27,7 @@ export const accountPreferencesApi = createApi({
       invalidatesTags: ['AccountPreferences'],
     }),
 
-    updateAccountPreferences: builder.mutation<
-      UpdateAccountPreferencesDto,
-      UpdateAccountPreferencesDto
-    >({
+    updateAccountPreferences: builder.mutation<{ message: string }, UpdateAccountPreferencesDto>({
       query: (body) => ({
         url: `/account-preferences/${body.AccountPreferenceID}`,
         method: 'PATCH',
@@ -37,12 +35,14 @@ export const accountPreferencesApi = createApi({
       }),
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled;
+          const {
+            data: { message },
+          } = await queryFulfilled;
+          dispatch(addToastMessage({ message }));
+          dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
         } catch (error) {
           console.error(error);
         }
-
-        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
       },
       invalidatesTags: (_result, _error, { AccountPreferenceID }) => [
         { type: 'AccountPreferences', id: AccountPreferenceID },

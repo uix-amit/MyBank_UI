@@ -3,6 +3,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { CreateLoanDto, UpdateLoanDto } from '@shared/models';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
+import { addToastMessage } from '@shared/store/toast.slice';
 
 export const loansApi = createApi({
   reducerPath: 'loansApi',
@@ -19,7 +20,7 @@ export const loansApi = createApi({
       providesTags: (_result, _error, loanId) => [{ type: 'Loan', id: loanId }],
     }),
 
-    createLoan: builder.mutation<CreateLoanDto, CreateLoanDto>({
+    createLoan: builder.mutation<{ message: string }, CreateLoanDto>({
       query: (body) => ({
         url: '/loans',
         method: 'POST',
@@ -27,12 +28,14 @@ export const loansApi = createApi({
       }),
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled;
+          const {
+            data: { message },
+          } = await queryFulfilled;
+          dispatch(addToastMessage({ message }));
+          dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
         } catch (error) {
           console.error(error);
         }
-
-        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
       },
       invalidatesTags: ['Loan'],
     }),

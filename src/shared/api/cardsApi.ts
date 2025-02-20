@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { CreateCardDto, UpdateCardDto } from '@shared/models';
 import { CardList } from '@shared/models/card-list.dto';
+import { addToastMessage } from '@shared/store/toast.slice';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
 
@@ -20,7 +21,7 @@ export const cardsApi = createApi({
       providesTags: (_result, _error, cardId) => [{ type: 'Card', id: cardId }],
     }),
 
-    createCard: builder.mutation<CreateCardDto, CreateCardDto>({
+    createCard: builder.mutation<{ message: string }, CreateCardDto>({
       query: (body) => ({
         url: '/cards',
         method: 'POST',
@@ -28,12 +29,14 @@ export const cardsApi = createApi({
       }),
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled;
+          const {
+            data: { message },
+          } = await queryFulfilled;
+          dispatch(addToastMessage({ message }));
+          dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
         } catch (error) {
           console.error(error);
         }
-
-        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
       },
       invalidatesTags: ['Card'],
     }),
