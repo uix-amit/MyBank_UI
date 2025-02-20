@@ -1,7 +1,13 @@
 import dropin, { Dropin } from 'braintree-web-drop-in';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import loanTransactionsApi from '@shared/api/loanTransactionsApi';
+import loansApi from '@shared/api/loansApi';
+import notificationsApi from '@shared/api/notificationsApi';
+import savingsAccountApi from '@shared/api/savingsAccountApi';
+import transactionsApi from '@shared/api/transactionsApi';
 import axiosInstance from '@utils/axiosInstance';
 
 function Braintree({
@@ -21,6 +27,7 @@ function Braintree({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dropinContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const fetchClientToken = async () =>
     await axiosInstance
       .get('/braintree/client-token')
@@ -82,9 +89,18 @@ function Braintree({
             transaction: transactionData,
             transactionType,
           })
-          .then(() =>
-            navigate(transactionType === 'Transfer' ? '/transaction' : '/loan-transaction')
-          )
+          .then(() => {
+            dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+            if (transactionType === 'Transfer') {
+              dispatch(transactionsApi.util.invalidateTags([{ type: 'Transaction' }]));
+              dispatch(savingsAccountApi.util.invalidateTags([{ type: 'SavingsAccount' }]));
+              navigate('/transaction');
+            } else {
+              dispatch(loanTransactionsApi.util.invalidateTags([{ type: 'LoanTransaction' }]));
+              dispatch(loansApi.util.invalidateTags([{ type: 'Loan' }]));
+              navigate('/loan-transaction');
+            }
+          })
           .catch(console.error);
       } catch (err) {
         setError('Payment processing failed');

@@ -1,6 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from './baseQuery';
+
 import { CreateLoanDto, UpdateLoanDto } from '@shared/models';
+import { baseQuery } from './baseQuery';
+import notificationsApi from './notificationsApi';
 
 export const loansApi = createApi({
   reducerPath: 'loansApi',
@@ -23,6 +25,15 @@ export const loansApi = createApi({
         method: 'POST',
         body,
       }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error(error);
+        }
+
+        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+      },
       invalidatesTags: ['Loan'],
     }),
 

@@ -1,6 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from './baseQuery';
+
 import { CreateAccountDto, UpdateAccountDto } from '@shared/models';
+import { baseQuery } from './baseQuery';
+import notificationsApi from './notificationsApi';
 
 export const savingsAccountApi = createApi({
   reducerPath: 'savingsAccountApi',
@@ -29,6 +31,15 @@ export const savingsAccountApi = createApi({
         method: 'POST',
         body,
       }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error(error);
+        }
+
+        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+      },
       invalidatesTags: ['SavingsAccount'],
     }),
 

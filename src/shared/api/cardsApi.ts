@@ -3,6 +3,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { CreateCardDto, UpdateCardDto } from '@shared/models';
 import { CardList } from '@shared/models/card-list.dto';
 import { baseQuery } from './baseQuery';
+import notificationsApi from './notificationsApi';
 
 export const cardsApi = createApi({
   reducerPath: 'cardsApi',
@@ -25,6 +26,15 @@ export const cardsApi = createApi({
         method: 'POST',
         body,
       }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error(error);
+        }
+
+        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+      },
       invalidatesTags: ['Card'],
     }),
 

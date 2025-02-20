@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { CreateUserDto, UpdateUserDto } from '@shared/models';
 import { baseQuery } from './baseQuery';
+import notificationsApi from './notificationsApi';
 
 export const userApi = createApi({
   reducerPath: 'user',
@@ -30,6 +31,15 @@ export const userApi = createApi({
         method: 'PATCH',
         body,
       }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error(error);
+        }
+
+        dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+      },
       invalidatesTags: (_result, _error, { UserID }) => [{ type: 'User', id: UserID }],
     }),
   }),
