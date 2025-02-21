@@ -8,6 +8,7 @@ import loansApi from '@shared/api/loansApi';
 import notificationsApi from '@shared/api/notificationsApi';
 import savingsAccountApi from '@shared/api/savingsAccountApi';
 import transactionsApi from '@shared/api/transactionsApi';
+import { addToastMessage } from '@shared/store/toast.slice';
 import axiosInstance from '@utils/axiosInstance';
 
 function Braintree({
@@ -89,8 +90,10 @@ function Braintree({
             transaction: transactionData,
             transactionType,
           })
-          .then(() => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .then(({ message }: any) => {
             dispatch(notificationsApi.util.invalidateTags([{ type: 'Notification' }]));
+            dispatch(addToastMessage({ message }));
             if (transactionType === 'Transfer') {
               dispatch(transactionsApi.util.invalidateTags([{ type: 'Transaction' }]));
               dispatch(savingsAccountApi.util.invalidateTags([{ type: 'SavingsAccount' }]));

@@ -5,15 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import accountPreferencesApi from '@shared/api/accountPreferencesApi';
+import userApi from '@shared/api/userApi';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
-import axiosInstance from '@utils/axiosInstance';
 
 function Preference() {
   const { data: accountPreferences, isLoading } =
     accountPreferencesApi.useGetAccountPreferencesQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [updateAccountPreferences] = accountPreferencesApi.useUpdateAccountPreferencesMutation();
+  const { data: user } = userApi.useGetUserQuery();
   const formik = useFormik({
     initialValues: {
       EnableTwoFactorAuth: accountPreferences?.EnableTwoFactorAuth,
@@ -25,11 +27,14 @@ function Preference() {
       SMSNotifications: Yup.boolean().notRequired(),
       EmailNotifications: Yup.boolean().notRequired(),
     }),
-    onSubmit: (values) =>
-      axiosInstance
-        .patch(`account-preferences/${accountPreferences?.AccountPreferenceID}`, values)
-        .then(() => navigate('/'))
-        .catch(console.error),
+    onSubmit: async (values) => {
+      await updateAccountPreferences({
+        ...values,
+        AccountPreferenceID: accountPreferences?.AccountPreferenceID as string,
+        UserID: user?.UserID as string,
+      });
+      navigate('/');
+    },
     onReset: () => {
       formik.resetForm();
     },
@@ -39,11 +44,6 @@ function Preference() {
     dispatch(setTitle('preferences'));
   }, [dispatch]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleCheckboxChange = (event: any) => {
-    formik.setFieldValue(event.target.name, event.target.checked);
-  };
-
   useEffect(() => {
     formik.setValues({
       EnableTwoFactorAuth: accountPreferences?.EnableTwoFactorAuth,
@@ -51,6 +51,11 @@ function Preference() {
       EmailNotifications: accountPreferences?.EmailNotifications,
     });
   }, [accountPreferences]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCheckboxChange = (event: any) => {
+    formik.setFieldValue(event.target.name, event.target.checked);
+  };
 
   if (isLoading) {
     return <></>;
