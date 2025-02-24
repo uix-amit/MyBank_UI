@@ -4,6 +4,7 @@ import { CreateAccountDto, UpdateAccountDto } from '@shared/models';
 import { addToastMessage } from '@shared/store/toast.slice';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
+import { AccountStats } from '@shared/models/account-stats';
 
 export const savingsAccountApi = createApi({
   reducerPath: 'savingsAccountApi',
@@ -17,6 +18,10 @@ export const savingsAccountApi = createApi({
     >({
       query: () => '/savings-account',
       providesTags: ['SavingsAccount'],
+    }),
+
+    getAccountStats: builder.query<AccountStats, void>({
+      query: () => '/savings-account/stats',
     }),
 
     // Get a single savings account by ID

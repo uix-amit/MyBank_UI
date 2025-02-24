@@ -1,4 +1,12 @@
+import savingsAccountApi from '@shared/api/savingsAccountApi';
+import { formatNumber } from '@utils/utils';
+
 function Stats() {
+  const { data: accountStats, isLoading } = savingsAccountApi.useGetAccountStatsQuery();
+
+  if (isLoading) {
+    return <></>;
+  }
   return (
     <div className='stats shadow w-full'>
       <div className='stat'>
@@ -9,7 +17,9 @@ function Stats() {
           />
         </div>
         <div className='stat-title'>My Balance</div>
-        <div className='stat-value text-primary'>25.6K</div>
+        {accountStats?.Balance && (
+          <div className='stat-value text-primary'>{formatNumber(accountStats.Balance)}</div>
+        )}
         <div className='stat-desc text-secondary'>21% more than last month</div>
       </div>
 
@@ -21,7 +31,11 @@ function Stats() {
           />
         </div>
         <div className='stat-title'>Income</div>
-        <div className='stat-value text-primary'>2.6M</div>
+        {accountStats?.Income.amountOfTransactions && (
+          <div className='stat-value text-primary'>
+            {formatNumber(accountStats.Income.amountOfTransactions)}
+          </div>
+        )}
         <div className='stat-desc text-secondary'>21% more than last month</div>
       </div>
 
@@ -33,7 +47,11 @@ function Stats() {
           />
         </div>
         <div className='stat-title'>Expense</div>
-        <div className='stat-value text-primary'>86%</div>
+        {accountStats?.Expenses.amountOfTransactions && (
+          <div className='stat-value text-primary'>
+            {formatNumber(accountStats.Expenses.amountOfTransactions)}
+          </div>
+        )}
         <div className='stat-desc text-secondary'>31 tasks remaining</div>
       </div>
 
@@ -45,7 +63,9 @@ function Stats() {
           />
         </div>
         <div className='stat-title'>Total Saving</div>
-        <div className='stat-value text-primary'>2.6M</div>
+        <div className='stat-value text-primary'>
+          {formatNumber(accountStats?.Savings as number)}
+        </div>
         <div className='stat-desc text-secondary'>21% more than last month</div>
       </div>
     </div>
