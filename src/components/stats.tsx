@@ -20,7 +20,7 @@ function Stats() {
         {accountStats?.Balance && (
           <div className='stat-value text-primary'>{formatNumber(accountStats.Balance)}</div>
         )}
-        <div className='stat-desc text-secondary'>21% more than last month</div>
+        <div className='stat-desc text-secondary'>Income - Expenses</div>
       </div>
 
       <div className='stat'>
@@ -36,7 +36,7 @@ function Stats() {
             {formatNumber(accountStats.Income.amountOfTransactions)}
           </div>
         )}
-        <div className='stat-desc text-secondary'>21% more than last month</div>
+        <div className='stat-desc text-secondary'>Money earned or received</div>
       </div>
 
       <div className='stat'>
@@ -52,7 +52,7 @@ function Stats() {
             {formatNumber(accountStats.Expenses.amountOfTransactions)}
           </div>
         )}
-        <div className='stat-desc text-secondary'>31 tasks remaining</div>
+        <div className='stat-desc text-secondary'>Money spent</div>
       </div>
 
       <div className='stat'>
@@ -66,7 +66,7 @@ function Stats() {
         <div className='stat-value text-primary'>
           {formatNumber(accountStats?.Savings as number)}
         </div>
-        <div className='stat-desc text-secondary'>21% more than last month</div>
+        <div className='stat-desc text-secondary'>Unspent income set aside</div>
       </div>
     </div>
   );

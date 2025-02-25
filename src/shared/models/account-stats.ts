@@ -9,3 +9,9 @@ export interface AccountStats {
   Expenses: IncomeExpenses;
   Savings: number;
 }
+
+export interface LoanAccountStats {
+  LoanAmount: number;
+  EMI: number;
+  InterestPaid: number;
+}

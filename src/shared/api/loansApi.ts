@@ -4,6 +4,7 @@ import { CreateLoanDto, UpdateLoanDto } from '@shared/models';
 import { baseQuery } from './baseQuery';
 import notificationsApi from './notificationsApi';
 import { addToastMessage } from '@shared/store/toast.slice';
+import { LoanAccountStats } from '@shared/models/account-stats';
 
 export const loansApi = createApi({
   reducerPath: 'loansApi',
@@ -13,6 +14,10 @@ export const loansApi = createApi({
     getLoans: builder.query<Array<UpdateLoanDto & { Bank: { BankName: string } }>, void>({
       query: () => '/loans',
       providesTags: ['Loan'],
+    }),
+
+    getLoanAccountStats: builder.query<LoanAccountStats, void>({
+      query: () => '/loans/stats',
     }),
 
     getLoanById: builder.query<UpdateLoanDto, string>({
