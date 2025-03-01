@@ -14,11 +14,13 @@ function TransactionSummary({
           alt='transaction'
         />
         <div className='flex flex-col'>
-          <p>Lorem ipsum</p>
-          <p>{format(transaction.transactionDate, 'do MMMM yyyy')}</p>
+          <p className='lowercase'>{transaction.TransactionStatus}</p>
+          <p>{format(transaction.TransactionDate, 'do MMMM yyyy')}</p>
         </div>
       </div>
-      <div className='text-primary font-bold'>${transaction.amount}</div>
+      <div className='text-primary font-bold'>
+        {transaction.FromAccount.Currency} {transaction.Amount}
+      </div>
     </div>
   );
 }

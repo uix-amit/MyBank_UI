@@ -2,50 +2,25 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { accounts, loanTransactions, transactions } from '@assets/stubs/fake-data';
-import AreaChart from '@components/area-chart';
 import BankCard from '@components/bank-card';
 import BarChart from '@components/bar-chart';
 import PieChart from '@components/pie-chart';
 import TransactionSummary from '@components/transaction-summary';
+import dashboardApi from '@shared/api/dashboardApi';
 import { setTitle } from '@shared/store/header.slice';
 import { AppDispatch } from '@shared/store/rootStore';
 
 function Dashboard() {
+  const { data: dashboardData, isLoading } = dashboardApi.useGetDashboardDataQuery();
   const dispatch = useDispatch<AppDispatch>();
-
-  /* CHARTS */
-  const balanceHistory = [
-    {
-      name: 'ICICI',
-      data: [30, 40, 45, 50, 49, 60],
-    },
-    {
-      name: 'SBI',
-      data: [10, 20, 47, 54, 67, 98],
-    },
-    {
-      name: 'HDFC',
-      data: [1, 3, 6, 2, 80, 120],
-    },
-  ];
-  const categories = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const weeklyExpences = [
-    {
-      name: 'Credit',
-      data: [30, 40, 45, 50, 49, 60, 45],
-    },
-    {
-      name: 'Debit',
-      data: [1, 3, 6, 2, 80, 120, 20],
-    },
-  ];
-  const currentBalance = [100, 23, 45];
 
   useEffect(() => {
     dispatch(setTitle('dashboard'));
   }, [dispatch]);
+
+  if (isLoading || !dashboardData) {
+    return <></>;
+  }
 
   return (
     <div className='flex flex-col gap-5'>
@@ -60,37 +35,36 @@ function Dashboard() {
             </h2>
           </div>
           <div className='flex flex-col lg:flex-row gap-4 w-full'>
-            {accounts.map((account) => (
-              <div key={account.accountID} className='w-full lg:w-1/2 min-w-80'>
-                <BankCard account={account} />
-              </div>
-            ))}
-          </div>
-          <h2 className='text-xl font-bold'>Balance History</h2>
-          <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
-            <AreaChart data={balanceHistory} categories={categories} />
+            {dashboardData &&
+              dashboardData.accounts.map((account) => (
+                <div key={account.AccountID} className='w-full lg:w-1/2 min-w-80'>
+                  <BankCard account={account} />
+                </div>
+              ))}
           </div>
           <h2 className='text-xl font-bold'>Weekly Activity</h2>
           <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
-            <BarChart data={weeklyExpences} categories={days} />
+            {dashboardData && <BarChart data={dashboardData.weeklyTransactions} />}
           </div>
         </div>
         <div className='w-full flex flex-col lg:w-1/3 gap-4'>
           <h2 className='text-xl font-bold'>Recent Transactions</h2>
           <div className='z-0 flex flex-col card rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
-            {transactions.map((transaction) => (
-              <TransactionSummary key={transaction.transactionID} transaction={transaction} />
-            ))}
+            {dashboardData &&
+              dashboardData.transactions.map((transaction) => (
+                <TransactionSummary key={transaction.TransactionID} transaction={transaction} />
+              ))}
           </div>
           <h2 className='text-xl font-bold'>Current Balance</h2>
           <div className='flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
-            <PieChart series={currentBalance} />
+            {dashboardData && <PieChart series={dashboardData.accountBalanceByBank} />}
           </div>
           <h2 className='text-xl font-bold'>Loan Transactions</h2>
           <div className='z-0 flex flex-col card w-full rounded-lg bg-white px-6 pt-6 pb-4 shadow-lg'>
-            {loanTransactions.map((transaction) => (
-              <TransactionSummary key={transaction.transactionID} transaction={transaction} />
-            ))}
+            {dashboardData &&
+              dashboardData.loanTransactions.map((transaction) => (
+                <TransactionSummary key={transaction.TransactionID} transaction={transaction} />
+              ))}
           </div>
         </div>
       </div>

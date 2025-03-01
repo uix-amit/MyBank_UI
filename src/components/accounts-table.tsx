@@ -8,8 +8,6 @@ function AccountsTable({
 }: {
   accounts: Array<UpdateAccountDto & { Bank: { BankName: string } }>;
 }) {
-  console.table(accounts);
-
   return (
     <div className='overflow-x-auto shadow rounded-lg'>
       <table className='table w-full'>

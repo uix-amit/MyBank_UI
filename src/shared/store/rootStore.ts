@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import accountPreferencesApi from '@shared/api/accountPreferencesApi';
 import cardsApi from '@shared/api/cardsApi';
+import dashboardApi from '@shared/api/dashboardApi';
 import loanTransactionsApi from '@shared/api/loanTransactionsApi';
 import loansApi from '@shared/api/loansApi';
 import notificationsApi from '@shared/api/notificationsApi';
@@ -25,6 +26,7 @@ export const store = configureStore({
     [loansApi.reducerPath]: loansApi.reducer,
     [transactionsApi.reducerPath]: transactionsApi.reducer,
     [loanTransactionsApi.reducerPath]: loanTransactionsApi.reducer,
+    [dashboardApi.reducerPath]: dashboardApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -35,7 +37,8 @@ export const store = configureStore({
       cardsApi.middleware,
       loansApi.middleware,
       transactionsApi.middleware,
-      loanTransactionsApi.middleware
+      loanTransactionsApi.middleware,
+      dashboardApi.middleware
     ),
 });
 

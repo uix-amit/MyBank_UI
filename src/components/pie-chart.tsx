@@ -1,11 +1,13 @@
 import Chart from 'react-apexcharts';
 
-function PieChart({ series }: { series: number[] }) {
+import { AccountBalanceByBank } from '@shared/models/dashboard-data';
+
+function PieChart({ series }: { series: AccountBalanceByBank[] }) {
   const options = {
     chart: {
       id: 'basic-pie',
     },
-    labels: ['ICICI', 'SBI', 'HDFC'],
+    labels: series.map(({ BankName }) => BankName),
     plotOptions: {
       pie: {
         customScale: 1,
@@ -19,7 +21,9 @@ function PieChart({ series }: { series: number[] }) {
     },
   };
 
-  return <Chart options={options} series={series} type='pie' />;
+  return (
+    <Chart options={options} series={series.map(({ TotalBalance }) => TotalBalance)} type='pie' />
+  );
 }
 
 export default PieChart;
