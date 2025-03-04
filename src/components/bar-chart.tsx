@@ -17,7 +17,7 @@ function BarChart({ data }: { data: ApexAxisChartSeries }) {
       last7Days.push(dayName);
     }
 
-    return last7Days;
+    return last7Days.reverse();
   };
 
   const options: ApexOptions = {
