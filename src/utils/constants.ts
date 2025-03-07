@@ -1,4 +1,4 @@
-export const BASE_URL: string = 'http://localhost:3000/api/v1';
+export const BASE_URL: string = 'https://my-bank-puce.vercel.app/api/v1';
 
 export const LOAN_TYPES = [
   { value: 'HOME', label: 'HOME' },
